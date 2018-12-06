@@ -1,0 +1,10 @@
+mat-radio-button+mat-radio-button {
+    margin-left: .5rem;
+}
+mat-dialog-content {
+    padding-bottom: 2rem;
+}
+
+.mat-form {
+    margin-bottom: 2rem;
+}

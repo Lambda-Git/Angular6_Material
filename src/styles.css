@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'material-design-icons/iconfont/material-icons.css';
+
+
+.href:hover {
+    cursor: pointer;
+}
+.mat-form {
+    min-width: 150px;
+    /* max-width: 500px; */
+    width: 100%;
+    max-width: 100%;
+    /*margin-bottom: 2rem;*/
+}
+.mat-full-width {
+    width: 100%
+}
+
+.page-container {
+    min-height: 100vh;
+}
+
+h3.mat-headline {
+    margin-bottom: 0px;
+}
+
+mat-radio-button+mat-radio-button {
+    margin-left: .5rem;
+}
+mat-dialog-content {
+    padding-bottom: 2rem;
+}
+.mat-table {
+    width:100%;
+}
+mat-dialog-container.mat-dialog-container{
+  border-radius:10px;
+}
+.mat-mini-fab .mat-button-wrapper {
+  padding: 6px 0 10px 0!important;
+}

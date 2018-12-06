@@ -1,0 +1,54 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="text-primary">
+  <mat-icon class="baseline-border_color icon-image-preview" fxFlexAlign="auto">border_color</mat-icon>
+  <h4 fxFlex="">{{isNew?'新增主机':'修改主机'}}</h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content>
+  <perfect-scrollbar style="padding-right: 15px">
+    <form class="mat-form" [formGroup]="baseForm">
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="名称" formControlName="name">
+        <mat-error *ngIf="nameCtrl.getError('required')">
+          名称不能为空！
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="ip地址" formControlName="ip">
+        <mat-error *ngIf="ipCtrl.getError('required')">
+          ip地址不能为空！
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="主机域名" formControlName="domain">
+        <mat-error *ngIf="domainCtrl.getError('required')">
+          主机域名不能为空！
+        </mat-error>
+      </mat-form-field>
+      <!--<mat-form-field class="mat-full-width">
+        <input matInput placeholder="通信协议" formControlName="protocol" >
+        <mat-error *ngIf="protocolCtrl.getError('required')">
+          通信协议不能为空！
+        </mat-error>
+      </mat-form-field>-->
+      <!--<mat-form-field class="mat-full-width">
+        <input matInput placeholder="端口" formControlName="port" >
+        <mat-error *ngIf="portCtrl.getError('required')">
+          端口不能为空！
+        </mat-error>
+      </mat-form-field>-->
+      <!--<div>
+        <label>类型: </label>
+        <mat-radio-group class="mat-full-width" formControlName="type">
+          <mat-radio-button value="docker">docker</mat-radio-button>
+        </mat-radio-group>
+      </div>-->
+    </form>
+  </perfect-scrollbar>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+  <button mat-raised-button color="primary" [disabled]="baseForm.invalid" (click)="doSave()">保存</button>
+</mat-dialog-actions>

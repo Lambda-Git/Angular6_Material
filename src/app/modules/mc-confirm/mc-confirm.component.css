@@ -1,0 +1,13 @@
+.modal {
+    z-index: 1099;
+}
+div.yesNo{
+  color: red;
+}
+.icon_error{
+  margin-right: 5px;
+  margin-top: 2px;
+}
+.mat-dialog-title {
+  margin: 0px !important;
+}

@@ -1,0 +1,82 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <h4 fxLayout="row">
+    <mat-icon class="baseline-border_color icon-image-preview" fxFlexAlign="auto">border_color</mat-icon>
+    <div style="margin-left: 10px">{{isNew?'新增通道':'修改通道'}}</div>
+  </h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <perfect-scrollbar style="padding-right: 15px">
+
+      <mat-tab-group>
+        <mat-tab label="基本信息">
+          <form class="mat-form" [formGroup]="baseForm" >
+            <mat-form-field class="mat-full-width">
+              <input matInput placeholder="通道名称" formControlName="name" >
+            </mat-form-field>
+            <mat-form-field class="mat-full-width">
+              <input matInput placeholder="出块时间" formControlName="timeout" >
+            </mat-form-field>
+            <mat-form-field class="mat-full-width">
+              <input matInput placeholder="交易个数" formControlName="msgCount" >
+            </mat-form-field>
+            <mat-form-field class="mat-full-width">
+              <input matInput placeholder="描述" formControlName="desc" >
+            </mat-form-field>
+          </form>
+        </mat-tab>
+
+        <mat-tab label="共识信息">
+          <table mat-table [dataSource]="consensusData" multiTemplateDataRows>
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> 共识名称 </th>
+              <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef> 共识类型 </th>
+              <td mat-cell *matCellDef="let row"> {{row.type}} </td>
+            </ng-container>
+            <ng-container matColumnDef="creator">
+              <th mat-header-cell *matHeaderCellDef> 创建人 </th>
+              <td mat-cell *matCellDef="let row"> {{row.creator}} </td>
+            </ng-container>
+            <ng-container matColumnDef="createDate">
+              <th mat-header-cell *matHeaderCellDef> 创建时间 </th>
+              <td mat-cell *matCellDef="let row"> {{row.createDate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="ordererOrgs">
+              <th mat-header-cell *matHeaderCellDef> 共识组织 </th>
+              <td mat-cell *matCellDef="let row"> {{row.ordererOrgs}} </td>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let row" [attr.colspan]="columnsToDisplay.length">
+                <div class="example-element-detail" *ngFor="let org of row.ordererOrgAddressMap|keys">
+                  <!--<span>{{org}}</span>-->
+                  <!--<div *ngFor="let host of row.ordererOrgAddressMap[org]|keys">{{host}}({{row.ordererOrgAddressMap[org][host].domain}})</div>-->
+                  <!--<div *ngFor="let host of row.ordererOrgAddressMap[org]|keys">{{host}}</div>-->
+                  <mat-checkbox *ngFor="let host of row.ordererOrgAddressMap[org]|keys" class="example-margin" >{{host}}</mat-checkbox>
+                </div>
+              </td>
+            </ng-container>
+          </table>
+        </mat-tab>
+
+        <mat-tab label="联盟信息">
+
+        </mat-tab>
+      </mat-tab-group>
+
+  </perfect-scrollbar>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+  <button mat-raised-button color="primary" [disabled]="baseForm.invalid" (click)="doSave()">保存</button>
+</mat-dialog-actions>

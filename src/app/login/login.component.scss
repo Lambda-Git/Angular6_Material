@@ -1,0 +1,55 @@
+/*设置背景body颜色*/
+::ng-deep body{
+  background-color:#e4e5e6;
+}
+*{
+  margin: 0px;
+  padding: 0px;
+}
+div.rowPage{
+  width: 800px;
+  height: 400px;
+  margin: 0px auto;
+  padding-top: 190px;
+  text-align: center;
+}
+div.leftRow{
+  float: left;
+  width: 350px;
+  height: 360px;
+  background-color: #fff;
+  border: 3px solid #fff;
+  border-radius: 5px;
+  padding: 1rem 2rem;
+}
+div.leftRow h3{
+  font-weight: 500;
+  margin-top: 1.5rem!important;
+  font-size: 1.53125rem;
+  margin-bottom: 20px;
+}
+div.leftRow .imgCode img{
+  width: 87px;
+}
+div.rightRow{
+  float: left;
+  width: 350px;
+  height: 360px;
+  background-color: #20a8d8!important;
+  border: 3px solid #20a8d8;
+  border-radius: 5px;
+}
+div.rightRow img{
+  vertical-align: middle;
+  border-style: none;
+  width: 60%;
+}
+div.rightRow h3{
+  font-weight: 500;
+  font-size: 1.53125rem;
+}
+div.rightRow .copyright{
+  font-size: .875rem;
+  font-weight: 400;
+}
+

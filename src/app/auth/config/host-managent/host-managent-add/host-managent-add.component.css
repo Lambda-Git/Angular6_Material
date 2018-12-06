@@ -1,0 +1,11 @@
+div.option{
+  float: left;
+  margin-right: 15px;
+}
+label.options{
+  float: left;
+  margin-right: 15px;
+}
+.mat-radio-button ~ .mat-radio-button {
+  padding-right: 16px;
+}

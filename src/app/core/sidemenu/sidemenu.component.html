@@ -1,0 +1,6 @@
+
+<perfect-scrollbar style="height: calc(100% - 33px);">
+    <div fxLayout="column" >
+        <cdk-sidemenu-item *ngFor="let menu of menus" [menu]="menu" [iconOnly]="iconOnly" (onSelected)="onChildSelected($event)"> </cdk-sidemenu-item>
+    </div>
+</perfect-scrollbar>

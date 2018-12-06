@@ -1,0 +1,73 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <h4 fxLayout="row">
+    <mat-icon class="baseline-border_color icon-image-preview">view_week</mat-icon>
+    <div style="margin-left: 10px;margin-top: -5px">主机列表</div>
+  </h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+  <mat-card-content>
+    <div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <div class="filter-bar-header">
+        <mat-icon>search</mat-icon>
+      </div>
+      <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
+           [formGroup]="baseForm">
+
+        <div fxFlex="200px">
+          <mat-form-field class="mat-full-width">
+            <input matInput placeholder="名称" formControlName="name" (change)="getHost()">
+          </mat-form-field>
+        </div>
+        <div fxFlex="200px">
+          <mat-form-field class="mat-full-width">
+            <input matInput placeholder="IP地址" formControlName="ip" (change)="getHost()">
+          </mat-form-field>
+        </div>
+
+      </div>
+    </div>
+    <table mat-table [dataSource]="datas" multiTemplateDataRows>
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+      </tr>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> 名称 </th>
+        <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="ip">
+        <th mat-header-cell *matHeaderCellDef> IP地址 </th>
+        <td mat-cell *matCellDef="let row"> {{row.ip}} </td>
+      </ng-container>
+      <ng-container matColumnDef="domain">
+        <th mat-header-cell *matHeaderCellDef> 主机域名 </th>
+        <td mat-cell *matCellDef="let row"> {{row.domain}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th class="button" mat-header-cell *matHeaderCellDef>
+        </th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <button mat-icon-button color="primary" (click)="setOnHost(row)" class="href">
+            <mat-icon matTooltip="启动">play_arrow</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+    </table>
+  </mat-card-content>
+
+  <mat-paginator [pageSizeOptions]="[5,10]"
+                 showFirstLastButtons
+                 [length]="page.totalElements"
+                 [pageSize]="page.pageSize"
+                 [pageIndex]="page.pageNum - 1"
+                 (page)="pageChanged($event)">
+
+  </mat-paginator>
+
+</mat-card>
+</mat-dialog-content>

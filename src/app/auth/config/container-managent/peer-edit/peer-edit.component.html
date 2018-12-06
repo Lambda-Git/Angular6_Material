@@ -1,0 +1,71 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="text-primary">
+  <mat-icon class="baseline-border_color icon-image-preview" fxFlexAlign="auto">border_color</mat-icon>
+  <h4 fxFlex="">{{isNew?'新增peer':'修改peer'}}</h4>
+  <button mat-icon-button mat-dialog-close><mat-icon>close</mat-icon></button>
+</div>
+<mat-dialog-content>
+  <perfect-scrollbar style="padding-right: 15px">
+    <form class="mat-form" [formGroup]="baseForm" >
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="容器名称" formControlName="containerName" >
+      </mat-form-field>
+      <div style="margin-top: 20px">
+        <label>开启debug: </label>
+        <mat-radio-group class="mat-full-width" formControlName="debug">
+          <mat-radio-button value="true" [checked]="debugCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="debugCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <label>开启ccDebug: </label>
+        <mat-radio-group class="mat-full-width" formControlName="ccDebug">
+          <mat-radio-button value="true" [checked]="ccDebugCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="ccDebugCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <label>单向加密通信: </label>
+        <mat-radio-group class="mat-full-width" formControlName="tls">
+          <mat-radio-button value="true" [checked]="tlsCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="tlsCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <label>开启客户端认证: </label>
+        <mat-radio-group class="mat-full-width" formControlName="clientAuthEnable">
+          <mat-radio-button value="true" [checked]="clientAuthEnableCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="clientAuthEnableCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <label>anchorPeer: </label>
+        <mat-radio-group class="mat-full-width" formControlName="anchorPeer">
+          <mat-radio-button value="true" [checked]="anchorPeerCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="anchorPeerCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <mat-form-field class="mat-full-width" style="margin-top: 20px;">
+        <mat-select placeholder="couchdb容器名称" formControlName="couchdbContainerName">
+          <mat-option value="-1">请选择</mat-option>
+          <mat-option *ngFor="let val of containerArrays" value="{{val}}">{{val}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="服务端口" formControlName="servicePort" >
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="智能合约端口" formControlName="ccPort" >
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="事件端口" formControlName="eventPort" >
+      </mat-form-field>
+
+    </form>
+  </perfect-scrollbar>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+  <button mat-raised-button color="primary" [disabled]="baseForm.invalid" (click)="doSave()">保存</button>
+</mat-dialog-actions>

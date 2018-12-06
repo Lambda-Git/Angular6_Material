@@ -1,0 +1,95 @@
+<mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+      <mat-card-content>
+        <div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+          <div class="filter-bar-header">
+            <mat-icon>search</mat-icon>
+          </div>
+          <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
+               [formGroup]="baseForm">
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="发送者组织" formControlName="org" (change)="getNews()">
+              </mat-form-field>
+            </div>
+            <div fxFlex="initial" fxFlexAlign="center">
+              <mat-form-field>
+                <mat-select placeholder="消息类别" formControlName="type" (selectionChange)="getNews()">
+                  <mat-option value="-1">请选择</mat-option>
+                  <mat-option value="CHANNEL">CHANNEL</mat-option>
+                  <mat-option value="CONSENSUS">CONSENSUS</mat-option>
+                  <mat-option value="CHAINCODE">CHANNELCODE</mat-option>
+                  <mat-option value="ORG">ORG</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="initial" fxFlexAlign="center">
+              <mat-form-field>
+                <mat-select placeholder="消息级别" formControlName="level" (selectionChange)="getNews()">
+                  <mat-option value="-1">请选择</mat-option>
+                  <mat-option value="INFO">INFO</mat-option>
+                  <mat-option value="ASK">ASK</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <button mat-mini-fab color="primary" matTooltip="刷新" (click)="getNews()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+        <table mat-table [dataSource]="users" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+              [class.example-expanded-row]="expandedRow === element">
+          </tr>
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef> 发送者</th>
+            <td mat-cell *matCellDef="let row"> {{row.username}}</td>
+          </ng-container>
+          <ng-container matColumnDef="org">
+            <th mat-header-cell *matHeaderCellDef> 发送者组织</th>
+            <td mat-cell *matCellDef="let row"> {{row.org}}</td>
+          </ng-container>
+          <ng-container matColumnDef="body">
+            <th mat-header-cell *matHeaderCellDef> 消息内容</th>
+            <td mat-cell *matCellDef="let row"> {{row.body}}</td>
+          </ng-container>
+          <ng-container matColumnDef="createDate">
+            <th mat-header-cell *matHeaderCellDef> 发送时间</th>
+            <td mat-cell *matCellDef="let row"> {{row.createDate}}</td>
+          </ng-container>
+          <ng-container matColumnDef="receivers">
+            <th mat-header-cell *matHeaderCellDef> 接收人</th>
+            <td mat-cell *matCellDef="let row"> {{row.receivers}}</td>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef> 消息类型</th>
+            <td mat-cell *matCellDef="let row"> {{row.type}}</td>
+          </ng-container>
+          <ng-container matColumnDef="level">
+            <th mat-header-cell *matHeaderCellDef> 消息级别</th>
+            <td mat-cell *matCellDef="let row"> {{row.level}}</td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef>
+              <!--<button class="refresh" mat-stroked-button color="primary" (click)="getNews()">刷新</button>-->
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <button mat-icon-button color="primary" (click)="detailMessage(row)" class="href">
+                <mat-icon matTooltip="详情">unfold_more</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+
+      <mat-paginator [pageSizeOptions]="[5,10]"
+                     showFirstLastButtons
+                     [length]="page.totalElements"
+                     [pageSize]="page.pageSize"
+                     [pageIndex]="page.pageNum - 1"
+                     (page)="pageChanged($event)">
+
+      </mat-paginator>
+
+</mat-card>

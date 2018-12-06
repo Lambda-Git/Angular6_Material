@@ -1,0 +1,123 @@
+<mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+
+      <mat-card-content>
+        <div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+          <div class="filter-bar-header">
+            <mat-icon>search</mat-icon>
+          </div>
+          <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
+               [formGroup]="baseForm">
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="通道名称" formControlName="name" (change)="getPassway()">
+              </mat-form-field>
+            </div>
+            <div fxFlex="initial" fxFlexAlign="center">
+              <mat-form-field>
+                <mat-select placeholder="通道状态" formControlName="status" (selectionChange)="getPassway()">
+                  <mat-option value="-1">请选择</mat-option>
+                  <mat-option value="0">INIT</mat-option>
+                  <mat-option value="1">CREATE</mat-option>
+                  <mat-option value="2">PROPOSAL</mat-option>
+                  <mat-option value="3">START</mat-option>
+                  <mat-option value="4">RUNNING</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="initial" fxFlexAlign="center">
+              <mat-form-field>
+                <mat-select placeholder="创世块" formControlName="genesisBlock" (selectionChange)="getPassway()">
+                  <mat-option value="-1">请选择</mat-option>
+                  <mat-option value="true">是</mat-option>
+                  <mat-option value="false">否</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-mini-fab color="primary" matTooltip="增加通道" (click)="addConfig()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" matTooltip="刷新" (click)="getPassway()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+        <table mat-table [dataSource]="datas" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+          </tr>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> 通道名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="creator">
+            <th mat-header-cell *matHeaderCellDef> 创建人 </th>
+            <td mat-cell *matCellDef="let row"> {{row.creator}} </td>
+          </ng-container>
+          <ng-container matColumnDef="createDate">
+            <th mat-header-cell *matHeaderCellDef> 创建时间 </th>
+            <td mat-cell *matCellDef="let row"> {{row.createDate}} </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> 通道状态 </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="primary" selected *ngIf="row.status == 0">INIT</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.status == 1">CREATE</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.status == 2">PROPOSAL</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.status == 3">START</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.status == 4">RUNNING</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="consensusName">
+            <th mat-header-cell *matHeaderCellDef> 共识名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.consensusName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="timeout">
+            <th mat-header-cell *matHeaderCellDef> 出块时间 </th>
+            <td mat-cell *matCellDef="let row"> {{row.timeout}} </td>
+          </ng-container>
+          <ng-container matColumnDef="msgCount">
+            <th mat-header-cell *matHeaderCellDef> 交易个数 </th>
+            <td mat-cell *matCellDef="let row"> {{row.msgCount}} </td>
+          </ng-container>
+          <ng-container matColumnDef="desc">
+            <th mat-header-cell *matHeaderCellDef> 描述 </th>
+            <td mat-cell *matCellDef="let row"> {{row.desc}} </td>
+          </ng-container>
+          <ng-container matColumnDef="genesisBlock">
+            <th mat-header-cell *matHeaderCellDef> 创世块 </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.genesisBlock == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.genesisBlock == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef>
+              <!--<button class="add" mat-stroked-button color="primary" (click)="addConfig()">创建通道</button>-->
+              <!--<button class="refresh" mat-stroked-button color="primary" (click)="getPassway()">刷新</button>-->
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <button mat-icon-button color="primary" (click)="removeConfig(row)" class="href">
+                <mat-icon *ngIf=" row.status == 0" matTooltip="删除通道">delete</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="updateConfig(row)" class="href">
+                <mat-icon matTooltip="更新通道">edit</mat-icon>
+              </button>
+              <!--<button mat-icon-button color="primary" (click)="underwriteConfig(row)" class="href">-->
+                <!--<mat-icon matTooltip="签名通道">border_color</mat-icon>-->
+              <!--</button>-->
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+
+      <mat-paginator [pageSizeOptions]="[5,10]"
+
+        showFirstLastButtons
+        [length]="page.totalElements"
+        [pageSize]="page.pageSize"
+        [pageIndex]="page.pageNum - 1"
+        (page)="pageChanged($event)">
+
+      </mat-paginator>
+
+</mat-card>

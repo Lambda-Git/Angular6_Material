@@ -1,0 +1,66 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <h4 fxLayout="row">
+    <mat-icon class="baseline-border_color icon-image-preview">view_week</mat-icon>
+    <div style="margin-left: 10px">{{data.name}}容器列表</div>
+  </h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+    <mat-card-content>
+      <table mat-table [dataSource]="datas" multiTemplateDataRows>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        <ng-container matColumnDef="image">
+          <th mat-header-cell *matHeaderCellDef> 镜像 </th>
+          <td mat-cell *matCellDef="let row"> {{row.image}} </td>
+        </ng-container>
+        <ng-container matColumnDef="command">
+          <th mat-header-cell *matHeaderCellDef> 命令 </th>
+          <td mat-cell *matCellDef="let row"> {{row.command}} </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> 运行时间 </th>
+          <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+        </ng-container>
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef> 状态 </th>
+          <td mat-cell *matCellDef="let row"> {{row.state}} </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th class="button" mat-header-cell *matHeaderCellDef>
+            <!--<button class="add" mat-stroked-button color="primary" (click)="addConfig()">新增</button>-->
+            <!--<button class="refresh" mat-stroked-button color="primary" (click)="getConfigs()">刷新</button>-->
+          </th>
+          <td mat-cell *matCellDef="let row" class="text-right">
+            <button mat-icon-button color="primary" (click)="reboot(row)">
+              <mat-icon matTooltip="重新启动">power_settings_new</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="kill(row)">
+              <mat-icon matTooltip="杀死">clear</mat-icon>
+            </button>
+            <button *ngIf="expandedRow != row" mat-icon-button color="primary" (click)="toggleConfigDetail(row)">
+              <mat-icon matTooltip="展开详情">arrow_drop_down</mat-icon>
+            </button>
+            <button *ngIf="expandedRow == row" mat-icon-button color="primary" (click)="toggleConfigDetail(row)">
+              <mat-icon matTooltip="收起详情">arrow_drop_up</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let row" [attr.colspan]="columnsToDisplay.length">
+            <div class="example-element-detail mb-1" [@detailExpand]="row == expandedRow ? 'expanded' : 'collapsed'">
+              {{row.expandedDetailData}}
+            </div>
+          </td>
+        </ng-container>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+

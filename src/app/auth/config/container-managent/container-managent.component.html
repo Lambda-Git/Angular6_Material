@@ -1,0 +1,274 @@
+<mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+  <mat-tab-group (selectedTabChange)="tabClick($event)">
+    <mat-tab label="ca列表">
+      <mat-card-content>
+        <!--查询条件-->
+        <!--<div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+          <div class="filter-bar-header">
+            <mat-icon>search</mat-icon>
+          </div>
+          <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
+               [formGroup]="caBaseForm">
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="容器名称" formControlName="containerName" (change)="getCa()">
+              </mat-form-field>
+            </div>
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="启动端口" formControlName="port" (change)="getCa()">
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-mini-fab color="primary" matTooltip="增加ca" (click)="addCa()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" matTooltip="刷新" (click)="getCa()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>-->
+        <table mat-table [dataSource]="data_ca" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay_ca"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay_ca;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+          </tr>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> ca名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="containerName">
+            <th mat-header-cell *matHeaderCellDef> 容器名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.containerName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="tls">
+            <th mat-header-cell *matHeaderCellDef> 加密通信 </th>
+            <td mat-cell *matCellDef="let row"> {{row.tls}} </td>
+          </ng-container>
+          <ng-container matColumnDef="debug">
+            <th mat-header-cell *matHeaderCellDef> 调试模式 </th>
+            <td mat-cell *matCellDef="let row"> {{row.debug}} </td>
+          </ng-container>
+          <ng-container matColumnDef="port">
+            <th mat-header-cell *matHeaderCellDef> 启动端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.port}} </td>
+          </ng-container>
+          <ng-container matColumnDef="admin">
+            <th mat-header-cell *matHeaderCellDef> 管理员用户名 </th>
+            <td mat-cell *matCellDef="let row"> {{row.admin}} </td>
+          </ng-container>
+          <ng-container matColumnDef="adminpw">
+            <th mat-header-cell *matHeaderCellDef> 管理员密码 </th>
+            <td mat-cell *matCellDef="let row"> {{row.adminpw}} </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef class="text-right">
+              <button mat-mini-fab color="primary" matTooltip="增加ca" (click)="addCa()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <button mat-icon-button color="primary" (click)="updateCa(row)" class="href">
+                <mat-icon *ngIf="row.containerID == ''" matTooltip="编辑">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="turnCaOn(row)" class="href">
+                <mat-icon *ngIf="row.containerID == ''" matTooltip="启动">view_week</mat-icon>
+              </button>
+              <!--<button *ngIf="row.active == 1" mat-icon-button color="primary" (click)="turnCaOff(row)" class="href">-->
+                <!--<mat-icon matTooltip="关闭">stop</mat-icon>-->
+              <!--</button>-->
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+    </mat-tab>
+
+    <mat-tab label="peer列表">
+      <mat-card-content>
+        <!--查询条件-->
+        <!--<div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+          <div class="filter-bar-header">
+            <mat-icon>search</mat-icon>
+          </div>
+          <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
+               [formGroup]="peerBaseForm">
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="容器名称" formControlName="containerName" (change)="getPeer()">
+              </mat-form-field>
+            </div>
+            <div fxFlex="230px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="服务端口/智能合约端口/事件端口" formControlName="port" (change)="getPeer()">
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-mini-fab color="primary" matTooltip="增加peer" (click)="addPeer()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" matTooltip="刷新" (click)="getPeer()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>-->
+        <table mat-table [dataSource]="data_peer" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay_peer"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay_peer;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+          </tr>
+          <ng-container matColumnDef="containerName">
+            <th mat-header-cell *matHeaderCellDef> 容器名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.containerName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="debug">
+            <th mat-header-cell *matHeaderCellDef> 开启debug </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.debug == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.debug == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="ccDebug">
+            <th mat-header-cell *matHeaderCellDef> 开启ccDebug </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.ccDebug == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.ccDebug == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="tls">
+            <th mat-header-cell *matHeaderCellDef> 单向加密通信 </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.tls == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.tls == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="clientAuthEnable">
+            <th mat-header-cell *matHeaderCellDef> 开启客户端认证 </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.clientAuthEnable == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.clientAuthEnable == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="anchorPeer">
+            <th mat-header-cell *matHeaderCellDef> anchorPeer </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.anchorPeer == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.anchorPeer == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="couchdbContainerName">
+            <th mat-header-cell *matHeaderCellDef> couchdb容器名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.couchdbContainerName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="servicePort">
+            <th mat-header-cell *matHeaderCellDef> 服务端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.servicePort}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ccPort">
+            <th mat-header-cell *matHeaderCellDef> 智能合约端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.ccPort}} </td>
+          </ng-container>
+          <ng-container matColumnDef="eventPort">
+            <th mat-header-cell *matHeaderCellDef> 事件端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.eventPort}} </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef class="text-right">
+              <button mat-mini-fab color="primary" matTooltip="增加peer" (click)="addPeer()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <div *ngIf="row.containerID == ''">
+                  <button mat-icon-button color="primary" (click)="updatePeer(row)" class="href">
+                    <mat-icon  matTooltip="编辑">edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="primary" (click)="turnPeerOn(row)" class="href">
+                    <mat-icon  matTooltip="启动">view_week</mat-icon>
+                  </button>
+                  <button *ngIf="row.anchorPeer != true " mat-icon-button color="primary" (click)="turnAnchorPeerOn(row)" class="href">
+                    <mat-icon matTooltip="设为anchorPeer">play_arrow</mat-icon>
+                  </button>
+                  <button *ngIf="row.anchorPeer == true" mat-icon-button color="primary" (click)="turnAnchorPeerOff(row)" class="href">
+                    <mat-icon matTooltip="取消anchorPeer">stop</mat-icon>
+                  </button>
+              </div>
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+    </mat-tab>
+
+    <mat-tab label="couchdb列表">
+      <mat-card-content>
+        <!--查询条件-->
+        <!--<div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+          <div class="filter-bar-header">
+            <mat-icon>search</mat-icon>
+          </div>
+          <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
+               [formGroup]="couchdbBaseForm">
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="容器名称" formControlName="containerName" (change)="getCouchdb()">
+              </mat-form-field>
+            </div>
+            <div fxFlex="200px">
+              <mat-form-field class="mat-full-width">
+                <input matInput placeholder="服务端口" formControlName="port" (change)="getCouchdb()">
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-mini-fab color="primary" matTooltip="增加couchdb" (click)="addCouchdb()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" matTooltip="刷新" (click)="getCouchdb()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>-->
+        <table mat-table [dataSource]="data_couchdb" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay_couchdb"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay_couchdb;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
+          </tr>
+          <ng-container matColumnDef="couchdbUsername">
+            <th mat-header-cell *matHeaderCellDef> 用户名 </th>
+            <td mat-cell *matCellDef="let row"> {{row.couchdbUsername}} </td>
+          </ng-container>
+          <ng-container matColumnDef="couchdbPassword">
+            <th mat-header-cell *matHeaderCellDef> 密码 </th>
+            <td mat-cell *matCellDef="let row"> {{row.couchdbPassword}} </td>
+          </ng-container>
+          <ng-container matColumnDef="port">
+            <th mat-header-cell *matHeaderCellDef> 服务端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.port}} </td>
+          </ng-container>
+          <ng-container matColumnDef="containerName">
+            <th mat-header-cell *matHeaderCellDef> 容器名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.containerName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="used">
+            <th mat-header-cell *matHeaderCellDef> 是否被使用</th>
+            <td mat-cell *matCellDef="let row">
+              <mat-chip color="accent" selected *ngIf="row.used == true">是</mat-chip>
+              <mat-chip color="primary" selected *ngIf="row.used == false">否</mat-chip>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef class="text-right">
+              <button mat-mini-fab color="primary" matTooltip="增加couchdb" (click)="addCouchdb()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <button mat-icon-button color="primary" (click)="updateCouchdb(row)" class="href">
+                <mat-icon *ngIf="row.containerID == ''" matTooltip="编辑">edit</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="turnCouchdbOn(row)" class="href">
+                <mat-icon *ngIf="row.containerID == ''" matTooltip="启动">view_week</mat-icon>
+              </button>
+              <!--<button *ngIf="row.active == 1" mat-icon-button color="primary" (click)="turnCouchdbOff(row)" class="href">
+                <mat-icon matTooltip="关闭">stop</mat-icon>
+              </button>-->
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+    </mat-tab>
+
+  </mat-tab-group>
+</mat-card>

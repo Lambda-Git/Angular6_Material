@@ -1,0 +1,47 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="text-primary">
+  <mat-icon class="baseline-border_color icon-image-preview" fxFlexAlign="auto">border_color</mat-icon>
+  <h4 fxFlex="">{{isNew?'新增ca':'修改ca'}}</h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content>
+  <perfect-scrollbar style="padding-right: 15px">
+    <form class="mat-form" [formGroup]="baseForm">
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="ca名称" formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="容器名称" formControlName="containerName">
+      </mat-form-field>
+      <div style="margin-top: 20px">
+        <label>加密通信: </label>
+        <mat-radio-group class="mat-full-width" formControlName="tls">
+          <mat-radio-button value="true" [checked]="tlsCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="tlsCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <label>调试模式: </label>
+        <mat-radio-group class="mat-full-width" formControlName="debug">
+          <mat-radio-button value="true" [checked]="debugCtrl.value == true">是</mat-radio-button>
+          <mat-radio-button value="false" [checked]="debugCtrl.value == false">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="启动端口" formControlName="port">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="管理员用户名" formControlName="admin">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="管理员密码" formControlName="adminpw">
+      </mat-form-field>
+    </form>
+  </perfect-scrollbar>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+  <button mat-raised-button color="primary" [disabled]="baseForm.invalid" (click)="doSave()">保存</button>
+</mat-dialog-actions>

@@ -1,0 +1,45 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="text-primary">
+  <mat-icon class="baseline-border_color icon-image-preview" fxFlexAlign="auto">border_color</mat-icon>
+  <h4 fxFlex="">{{isNew?'新增用户':'修改用户'}}</h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <perfect-scrollbar style="height:350px;padding-right: 15px">
+    <form class="mat-form" [formGroup]="baseForm">
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="用户名" formControlName="username">
+        <mat-error *ngIf="nameCtrl.getError('required')">
+          用户名不能为空！
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="邮箱" formControlName="email">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="电话" formControlName="phone">
+      </mat-form-field>
+      <div>
+        <label>是否激活: </label>
+        <mat-radio-group class="mat-full-width" formControlName="active">
+          <mat-radio-button value="1" [checked]="activeCtrl.value == 1">是</mat-radio-button>
+          <mat-radio-button value="0" [checked]="activeCtrl.value == 0">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div style="margin-top: 20px">
+        <label>用户角色: </label>
+        <mat-radio-group class="mat-full-width" formControlName="role">
+          <mat-radio-button value="1" [checked]="roleCtrl.value == 1">系统管理员</mat-radio-button>
+          <mat-radio-button value="0" [checked]="roleCtrl.value == 0">一般用户</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </form>
+  </perfect-scrollbar>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+  <button mat-raised-button color="primary" [disabled]="baseForm.invalid" (click)="doSave()">保存</button>
+</mat-dialog-actions>

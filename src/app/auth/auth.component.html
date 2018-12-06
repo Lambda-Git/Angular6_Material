@@ -1,0 +1,60 @@
+<mat-sidenav-container class="container" fullscreen>
+  <mat-sidenav [mode]="sideNavMode" class="sidenav" #sidenav [opened]="sideNavOpened" style="overflow: hidden;">
+    <mat-toolbar color="primary" class="mat-elevation-z4 over" fxLayout="row" fxLayoutAlign="center center">
+      <img src="./assets/images/banner.png" height=36>
+    </mat-toolbar>
+    <cdk-sidemenu #sidemenu></cdk-sidemenu>
+  </mat-sidenav>
+  <mat-sidenav-content style="z-index: auto;overflow: hidden;" #drawer>
+    <mat-toolbar class="mat-elevation-z4 toolbar-header" style="background-color: white">
+      <button mat-icon-button (click)="sidenav.toggle();" *ngIf="matDrawerShow">
+        <i class="material-icons app-toolbar-menu">menu </i>
+      </button>
+      <button mat-icon-button (click)="sidenav.toggle();" *ngIf="!matDrawerShow">
+        <i class="material-icons app-toolbar-menu">menu </i>
+      </button>
+      <h3>区块链节点平台</h3>
+      <div style="width: 100%;height: 100%;position: relative;">
+        <div class="toolbar-user-container" style="float: right">
+          <button mat-button (click)="isOpen = !isOpen" class="toolbar-user-btn" [class.open]="isOpen"
+                  [ngStyle.xs]="{'min-width': '70px'}">
+          <span fxLayout="row" fxLayoutAlign="start center">
+            <mat-icon>account_box</mat-icon>
+            <!--<span class="name" fxHide fxShow.gt-xs>{{currentUser?.currentUserName || Hari}}</span>-->
+            <span class="name" fxHide fxShow.gt-xs> {{user.username}} </span>
+            <mat-icon class="icon" fxHide fxShow.gt-xs>keyboard_arrow_down</mat-icon>
+          </span>
+          </button>
+          <div class="dropdown mat-elevation-z1" [class.open]="isOpen">
+            <div class="content">
+              <mat-nav-list>
+                <mat-list-item (click)="setUserInfo(user)">
+                  <button mat-icon-button>
+                    <mat-icon>settings</mat-icon>
+                  </button>
+                  <a matLine>修改密码</a>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+                <mat-list-item (click)="doLogout()">
+                  <button mat-icon-button>
+                    <mat-icon>settings_power</mat-icon>
+                  </button>
+                  <a matLine>退出</a>
+                </mat-list-item>
+              </mat-nav-list>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-toolbar>
+    <div class="components-container-gt-xs"
+         style="background-color: #e4e5e6;padding: 0px;padding-left: 20px;padding-right: 20px;"
+         [ngClass.xs]="'components-container-xs'" fxLayoutGap="10px">
+      <cdk-breadcrumb [sideMenu]="sidemenu">
+      </cdk-breadcrumb>
+      <perfect-scrollbar class="vhs">
+        <router-outlet></router-outlet>
+      </perfect-scrollbar>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

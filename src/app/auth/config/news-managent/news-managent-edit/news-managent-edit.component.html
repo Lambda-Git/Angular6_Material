@@ -1,0 +1,23 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+  <h4 fxLayout="row">
+    <mat-icon class="baseline-border_color icon-image-preview">view_week</mat-icon>
+    <div style="margin-left: 10px">{{data.name}}消息详情</div>
+  </h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+    <mat-tab-group>
+      <mat-tab label="payLoad">
+        {{this.payLoadData}}
+      </mat-tab>
+      <mat-tab label="Response">
+
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</mat-dialog-content>
+
