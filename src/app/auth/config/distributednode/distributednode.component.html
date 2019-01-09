@@ -1,0 +1,201 @@
+<!--当前模块路径-->
+<div class="curpath" fxLayout="row">
+  <div>
+    <mat-icon>format_indent_increase</mat-icon>
+  </div>
+  <div>
+    MDB配置
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div>
+    区块链系统配置
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+
+<mat-card class="page-container pt-0">
+  <mat-tab-group (selectedTabChange)="tabClick($event)">
+    <mat-tab label="系统参数配置">
+      <mat-card-content>
+        <table mat-table [dataSource]="data_1" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay_1"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay_1;" class="example-element-row" [class.example-expanded-row]="expandedRow_1 === element">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> 名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="dir">
+            <th mat-header-cell *matHeaderCellDef> 配置目录 </th>
+            <td mat-cell *matCellDef="let row"> {{row.dir}} </td>
+          </ng-container>
+          <ng-container matColumnDef="chainid">
+            <th mat-header-cell *matHeaderCellDef> 区块链名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.chainid}} </td>
+          </ng-container>
+          <ng-container matColumnDef="abcifile">
+            <th mat-header-cell *matHeaderCellDef> 状态文件 </th>
+            <td mat-cell *matCellDef="let row"> {{row.abcifile}} </td>
+          </ng-container>
+          <ng-container matColumnDef="power">
+            <th mat-header-cell *matHeaderCellDef> 节点权值 </th>
+            <td mat-cell *matCellDef="let row"> {{row.power}} </td>
+          </ng-container>
+          <ng-container matColumnDef="abciserv">
+            <th mat-header-cell *matHeaderCellDef> 链数据 <br> 服务端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.abciserv}} </td>
+          </ng-container>
+          <ng-container matColumnDef="rpcserv">
+            <th mat-header-cell *matHeaderCellDef> 链接口 <br> 调用端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.rpcserv}} </td>
+          </ng-container>
+          <ng-container matColumnDef="p2pserv">
+            <th mat-header-cell *matHeaderCellDef> 链节点 <br> 通讯端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.p2pserv}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ipfsserv">
+            <th mat-header-cell *matHeaderCellDef> 文件节点 <br> 通讯端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.ipfsserv}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ipfsapi">
+            <th mat-header-cell *matHeaderCellDef> 文件接口 <br> 调用端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.ipfsapi}} </td>
+          </ng-container>
+          <ng-container matColumnDef="ipfsgw">
+            <th mat-header-cell *matHeaderCellDef> 文件HTTP <br> 服务端口 </th>
+            <td mat-cell *matCellDef="let row"> {{row.ipfsgw}} </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> 状态 </th>
+            <td mat-cell *matCellDef="let row"> {{configStatus_1(row.name) | status }} </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef>
+              <button mat-mini-fab color="primary" matTooltip="增加系统参数配置" matTooltipPosition='above' (click)="addConfig_1()">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button class="refresh" mat-mini-fab color="primary" matTooltip="刷新" matTooltipPosition='above' (click)="getConfigs_1()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <button mat-icon-button color="primary" (click)="removeConfig_1(row)" class="href">
+                <mat-icon matTooltip="删除配置" matTooltipPosition='above'>delete</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="updateConfig_1(row)" class="href">
+                <mat-icon matTooltip="编辑配置" matTooltipPosition='above'>edit</mat-icon>
+              </button>
+              <button *ngIf="configStatus_1(row.name) != 'OPEN'" mat-icon-button color="primary" (click)="turnConfigOn_1(row.name)" class="href">
+                <mat-icon matTooltip="启用配置服务" matTooltipPosition='above'>play_arrow</mat-icon>
+              </button>
+              <button *ngIf="configStatus_1(row.name) == 'OPEN'" mat-icon-button color="primary" (click)="turnConfigOff_1(row.name)" class="href">
+                <mat-icon matTooltip="停用配置服务" matTooltipPosition='above'>stop</mat-icon>
+              </button>
+              <button *ngIf="expandedRow_1 != row" mat-icon-button color="primary" (click)="toggleConfigDetail_1(row)" class="href">
+                <mat-icon matTooltip="打开详情" matTooltipPosition='above'>arrow_drop_down</mat-icon>
+              </button>
+              <button *ngIf="expandedRow_1 == row" mat-icon-button color="primary" (click)="toggleConfigDetail_1(row)" class="href">
+                <mat-icon matTooltip="收起详情" matTooltipPosition='above'>arrow_drop_up</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let row" [attr.colspan]="columnsToDisplay_1.length">
+              <div class="example-element-detail mb-1" [@detailExpand]="row == expandedRow_1 ? 'expanded' : 'collapsed'">
+                <mat-chip-list>
+                  <mat-chip *ngFor="let k of configStatusMap[row.name]|keys|sort">
+                    <b>{{k}}:</b> {{configStatusMap[row.name][k]}}</mat-chip>
+                </mat-chip-list>
+              </div>
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+    </mat-tab>
+    <mat-tab label="链节点参数配置">
+      <mat-card-content>
+        <table mat-table [dataSource]="data_2" multiTemplateDataRows>
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay_2"></tr>
+          <tr mat-row *matRowDef="let element; columns: columnsToDisplay_2;" class="example-element-row" [class.example-expanded-row]="expandedRow_2 === element">
+          </tr>
+          <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> 链配置名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="nodename">
+            <th mat-header-cell *matHeaderCellDef> 节点名称 </th>
+            <td mat-cell *matCellDef="let row"> {{row.nodename}} </td>
+          </ng-container>
+          <ng-container matColumnDef="pubkey">
+            <th mat-header-cell *matHeaderCellDef> 公钥 </th>
+            <td mat-cell *matCellDef="let row"> {{row.pubkey}} </td>
+          </ng-container>
+          <ng-container matColumnDef="nodeid">
+            <th mat-header-cell *matHeaderCellDef> 节点标识 </th>
+            <td mat-cell *matCellDef="let row"> {{row.nodeid}} </td>
+          </ng-container>
+          <ng-container matColumnDef="addr">
+            <th mat-header-cell *matHeaderCellDef> 网络地址 </th>
+            <td mat-cell *matCellDef="let row"> {{row.addr}} </td>
+          </ng-container>
+          <ng-container matColumnDef="powerid">
+            <th mat-header-cell *matHeaderCellDef> 节点权值 </th>
+            <td mat-cell *matCellDef="let row"> {{row.powerid}} </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> 状态 </th>
+            <td mat-cell *matCellDef="let row"> {{configStatus_2(row.name) | status}} </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th class="button" mat-header-cell *matHeaderCellDef>
+              <button mat-mini-fab color="primary" matTooltip="增加链节点参数配置" matTooltipPosition='above' (click)="addConfig_2()">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button class="refresh" mat-mini-fab color="primary" matTooltip="刷新" matTooltipPosition='above' (click)="getConfigs_2()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" class="text-right">
+              <button mat-icon-button color="primary" (click)="removeConfig_2(row)" class="href">
+                <mat-icon matTooltip="删除配置" matTooltipPosition='above'>delete</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="updateConfig_2(row)" class="href">
+                <mat-icon matTooltip="编辑配置" matTooltipPosition='above'>edit</mat-icon>
+              </button>
+              <button *ngIf="configStatus_2(row.name) != 'OPEN'" mat-icon-button color="primary" (click)="turnConfigOn_2(row.name)" class="href">
+                <mat-icon matTooltip="启用链节点" matTooltipPosition='above'>play_arrow</mat-icon>
+              </button>
+              <button *ngIf="configStatus_2(row.name) == 'OPEN'" mat-icon-button color="primary" (click)="turnConfigOff_2(row.name)" class="href">
+                <mat-icon matTooltip="停用链节点" matTooltipPosition='above'>stop</mat-icon>
+              </button>
+              <button *ngIf="expandedRow_2 != row" mat-icon-button color="primary" (click)="toggleConfigDetail_2(row)" class="href">
+                <mat-icon matTooltip="打开详情" matTooltipPosition='above'>arrow_drop_down</mat-icon>
+              </button>
+              <button *ngIf="expandedRow_2 == row" mat-icon-button color="primary" (click)="toggleConfigDetail_2(row)" class="href">
+                <mat-icon matTooltip="收起详情" matTooltipPosition='above'>arrow_drop_up</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+          <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let row" [attr.colspan]="columnsToDisplay_2.length">
+              <div class="example-element-detail mb-1" [@detailExpand]="row == expandedRow_2 ? 'expanded' : 'collapsed'">
+                <mat-chip-list>
+                  <mat-chip *ngFor="let k of configStatusMap[row.name]|keys|sort">
+                    <b>{{k}}:</b> {{configStatusMap[row.name][k]}}</mat-chip>
+                </mat-chip-list>
+              </div>
+            </td>
+          </ng-container>
+        </table>
+      </mat-card-content>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

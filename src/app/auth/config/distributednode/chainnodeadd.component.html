@@ -1,0 +1,44 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" class="text-primary">
+  <mat-icon class="baseline-border_color icon-image-preview" fxFlexAlign="auto">border_color</mat-icon>
+  <h4 fxFlex="">{{isNew?'新增链节点参数配置':'修改链节点参数配置'}}</h4>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <perfect-scrollbar style="height:100%;padding-right: 15px">
+    <form class="mat-form" [formGroup]="baseForm">
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="链配置名称" formControlName="name">
+        <mat-error *ngIf="nameCtrl.hasError('required')">
+          必须输入名称！
+        </mat-error>
+        <!--必须先满足第一个校验-->
+        <mat-error *ngIf="!nameCtrl.hasError('required') && nameCtrl.hasError('name')">
+          {{nameCtrl.getError('name')}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="节点名称" formControlName="nodename">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="公钥" formControlName="pubkey">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="节点标识" formControlName="nodeid">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="网络地址" formControlName="addr">
+      </mat-form-field>
+      <mat-form-field class="mat-full-width">
+        <input matInput placeholder="节点权值" formControlName="powerid">
+      </mat-form-field>
+    </form>
+  </perfect-scrollbar>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+  <button mat-raised-button color="primary" [disabled]="baseForm.invalid" (click)="doSave()">保存</button>
+</mat-dialog-actions>

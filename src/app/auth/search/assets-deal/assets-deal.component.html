@@ -1,0 +1,208 @@
+<!--当前模块路径-->
+<div class="curpath" fxLayout="row">
+  <div>
+    <mat-icon>home</mat-icon>
+  </div>
+  <div>
+    系统概览
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div>
+    当前资产详情
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+
+<!--当前资产中的交易信息-->
+<mat-card class="page-container pt-0 index">
+  <div fxLayout="row" class="titleTab">
+    <div><mat-icon>loyalty</mat-icon></div>
+    <div>资产详情</div>
+  </div>
+  <mat-card-content>
+    <mat-grid-list cols="2" rowHeight="80px" style="margin-top: 30px">
+
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>资产ID</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.assetid">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="2">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>创建资产交易ID</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.createtx">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>创建资产时间</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.createtm">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="2">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>创建资产交易所在区块ID号</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.firstheigh">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>创建资产交易所在区块内索引号</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.firstindex">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="2">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>最后一次修改资产交易ID</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.lasttx">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>最后一次修改资产的时间</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.lasttm">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>最后一次修改资产交易所在区块的ID号</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.lastheight">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>最后一次修改资产交易所在区块内的索引号</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.lastindex">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>最后一笔交易用户数据的哈希值</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="assetsDealData.lastrdhash">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <!--用户数据 展示 json格式-->
+
+
+    </mat-grid-list>
+  </mat-card-content>
+
+  <div fxLayout="row" class="titleTab" style="margin-bottom: 18px">
+    <div><mat-icon>loyalty</mat-icon></div>
+    <div>用户数据信息</div>
+  </div>
+  <div class="jsonShow">
+    <pre>{{userInfoJson}}</pre>
+  </div>
+
+  <div fxLayout="row" class="titleTab" style="margin-bottom: 18px">
+    <div><mat-icon>loyalty</mat-icon></div>
+    <div>交易修改记录</div>
+  </div>
+  <mat-card-content>
+    <!--查询-->
+    <!--<div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">-->
+      <!--<div class="filter-bar-header">-->
+        <!--<mat-icon>search</mat-icon>-->
+      <!--</div>-->
+      <!--<div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px" [formGroup]="searchForm">-->
+        <!--<div fxFlex="200px">-->
+          <!--<mat-form-field>-->
+            <!--<mat-select placeholder="请选择年月" formControlName="dealTableName">-->
+              <!--<mat-option *ngFor="let tableName of dealTableNames" [value]="tableName.dealTableName" (click)="doSearchFor(tableName.dealTableName)">-->
+                <!--{{tableName.time}}-->
+              <!--</mat-option>-->
+            <!--</mat-select>-->
+          <!--</mat-form-field>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--table-list-->
+    <table mat-table [dataSource]="recordData" multiTemplateDataRows>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row"></tr>
+      <ng-container matColumnDef="datetime">
+        <th mat-header-cell *matHeaderCellDef>交易创建时间</th>
+        <td mat-cell *matCellDef="let row">{{row.datetime}}</td>
+      </ng-container>
+      <ng-container matColumnDef="height">
+        <th mat-header-cell *matHeaderCellDef>交易所在区块高度</th>
+        <td mat-cell *matCellDef="let row">{{row.height}}</td>
+      </ng-container>
+      <ng-container matColumnDef="dealTableName">
+        <th mat-header-cell *matHeaderCellDef>交易表名</th>
+        <td mat-cell *matCellDef="let row">{{row.dealTableName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="operate">
+        <th mat-header-cell *matHeaderCellDef>操作类型</th>
+        <td mat-cell *matCellDef="let row">{{row.operate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="record">
+        <th mat-header-cell *matHeaderCellDef>操作信息</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" class="href" (click)="createInfo(row)">操作信息</button>
+        </td>
+      </ng-container>
+
+    </table>
+
+  </mat-card-content>
+  <!--分页-->
+  <mat-paginator [pageSizeOptions]="[10]"
+                 showFirstLastButtons
+                 [length]="page.totalElements"
+                 [pageSize]="page.pageSize"
+                 [pageIndex]="page.pageNum"
+                 (page)="pageChanged($event)">
+  </mat-paginator>
+
+
+
+</mat-card>
+
+

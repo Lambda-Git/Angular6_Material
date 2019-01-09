@@ -1,0 +1,18 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="4px" class="text-primary">
+  <div><mat-icon style="margin-top: 7px;">loyalty</mat-icon></div>
+  <div fxFlex="">{{title}}</div>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <div class="jsonShow">
+    <pre>{{dealDetailJson}}</pre>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button mat-raised-button color="primary" mat-dialog-close>取消</button>
+</mat-dialog-actions>
+

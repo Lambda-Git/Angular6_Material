@@ -1,0 +1,24 @@
+tr.example-detail-row {
+  height: 0;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+th.button{
+  text-align: right;
+}
+
+button.refresh{
+  margin-left: 20px;
+}
+
+table.mat-table th.mat-header-cell{
+  background-color: rgba(0,0,0,.04);
+}

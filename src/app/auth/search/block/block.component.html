@@ -1,0 +1,100 @@
+<!--当前模块路径-->
+<div class="curpath" fxLayout="row">
+  <div>
+    <mat-icon>home</mat-icon>
+  </div>
+  <div>
+    系统概览
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div>
+    区块信息
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+
+<mat-card class="page-container pt-0 index">
+  <div fxLayout="row" class="titleTab">
+    <div><mat-icon>loyalty</mat-icon></div>
+    <div>区块列表</div>
+  </div>
+  <mat-card-content>
+    <!--查询-->
+    <div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <div class="filter-bar-header">
+        <mat-icon>search</mat-icon>
+      </div>
+      <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px"
+           [formGroup]="searchForm">
+        <div>
+          <label>块区间查询:</label>
+        </div>
+        <div fxFlex="200px">
+          <mat-form-field class="mat-full-width">
+            <input matInput placeholder="起始" formControlName="numberStart">
+            <mat-error *ngIf="numberStartCtrl.getError('required')">
+              请输入块起始块数！
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="200px">
+          <mat-form-field class="mat-full-width">
+            <input matInput placeholder="结束" formControlName="numberEnd">
+            <mat-error *ngIf="numberEndCtrl.getError('required')">
+              请输入结束块数！
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <button mat-flat-button color="primary" [disabled]="searchForm.invalid" (click)="doQuery()">
+          <mat-icon>search</mat-icon>查询
+        </button>
+      </div>
+    </div>
+    <!--table-list-->
+    <table mat-table [dataSource]="blockData" multiTemplateDataRows>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row"></tr>
+      <ng-container matColumnDef="height">
+        <th mat-header-cell *matHeaderCellDef>区块ID</th>
+        <td mat-cell *matCellDef="let row">{{row.height}}</td>
+      </ng-container>
+      <ng-container matColumnDef="txnum">
+        <th mat-header-cell *matHeaderCellDef>区块内交易数</th>
+        <td mat-cell *matCellDef="let row">{{row.txnum}}</td>
+      </ng-container>
+      <ng-container matColumnDef="hash">
+        <th mat-header-cell *matHeaderCellDef>区块HASH值</th>
+        <td mat-cell *matCellDef="let row">{{row.hash}}</td>
+      </ng-container>
+      <ng-container matColumnDef="last_block_id">
+        <th mat-header-cell *matHeaderCellDef>上个区块HASH值</th>
+        <td mat-cell *matCellDef="let row">{{row.last_block_id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="datetime">
+        <th mat-header-cell *matHeaderCellDef>区块创建时间</th>
+        <td mat-cell *matCellDef="let row">{{row.datetime}}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th class="button" mat-header-cell *matHeaderCellDef>
+
+        </th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <button mat-icon-button color="primary" class="href" (click)="getBlockDetail(row)">区块详情</button>
+        </td>
+      </ng-container>
+    </table>
+
+  </mat-card-content>
+  <!--分页-->
+  <mat-paginator [pageSizeOptions]="[10]"
+                 showFirstLastButtons
+                 [length]="page.totalElements"
+                 [pageSize]="page.pageSize"
+                 [pageIndex]="page.pageNum"
+                 (page)="pageChanged($event)">
+  </mat-paginator>
+</mat-card>

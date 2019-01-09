@@ -1,0 +1,21 @@
+.files-manager-content{
+  margin-left: 30px;
+  margin-top: 15px;
+}
+a{
+  text-decoration: none;
+}
+.right_td{
+  width: 328px;
+}
+.body{
+  padding-right: 40px;
+  padding-left: 25px;
+}
+.contentBox{
+  box-shadow: 2px 4px 6px #000;
+}
+table.contentBox{
+  border-radius: 5px;
+  background: #cae1ed;
+}

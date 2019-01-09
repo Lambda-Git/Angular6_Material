@@ -1,0 +1,152 @@
+<!--当前模块路径-->
+<div class="curpath" fxLayout="row">
+  <div>
+    <mat-icon>home</mat-icon>
+  </div>
+  <div>
+    系统概览
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div>
+    当前块详情
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+
+
+<mat-card class="page-container pt-0 index">
+
+  <div fxLayout="row" class="titleTab">
+    <div><mat-icon>loyalty</mat-icon></div>
+    <div>区块详情</div>
+  </div>
+  <mat-card-content>
+    <mat-grid-list cols="2" rowHeight="80px" style="margin-top: 30px">
+
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>当前区块HASH值</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="blockDetailData.hash">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="2">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>上个区块HASH值</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="blockDetailData.last_block_id">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>区块ID号</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="blockDetailData.height">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="2">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>区块内交易数</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="blockDetailData.txnum">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="1">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>区块创建UNIX时间戳</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="blockDetailData.tmstamp">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <div class="two_list">
+          <mat-grid-list cols="2">
+            <mat-form-field appearance="outline" class="mat-full-width">
+              <mat-label>区块创建时间</mat-label>
+              <input matInput placeholder="Placeholder" [(ngModel)]="blockDetailData.datetime">
+            </mat-form-field>
+          </mat-grid-list>
+        </div>
+      </mat-grid-tile>
+
+    </mat-grid-list>
+  </mat-card-content>
+
+  <div fxLayout="row">
+    <div><mat-icon>loyalty</mat-icon></div>
+    <div>交易列表</div>
+  </div>
+  <mat-card-content>
+    <!--查询-->
+    <div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
+      <div class="filter-bar-header">
+        <mat-icon>search</mat-icon>
+      </div>
+      <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px">
+        <!--表单字符串匹配--查询-->
+        <mat-form-field class="mat-full-width">
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!--交易列表-->
+    <table mat-table [dataSource]="blockDealData" multiTemplateDataRows>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="example-element-row"></tr>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>交易ID</th>
+        <td mat-cell *matCellDef="let row">{{row.id}}</td>
+      </ng-container>
+      <ng-container matColumnDef="addr">
+        <th mat-header-cell *matHeaderCellDef>交易主机地址/端口</th>
+        <td mat-cell *matCellDef="let row">{{row.addr}}</td>
+      </ng-container>database
+      <ng-container matColumnDef="operate">
+        <th mat-header-cell *matHeaderCellDef>操作类型</th>
+        <td mat-cell *matCellDef="let row">{{row.operate}}</td>
+      </ng-container>
+      <ng-container matColumnDef="tmstamp">
+        <th mat-header-cell *matHeaderCellDef>交易UNIX时间戳</th>
+        <td mat-cell *matCellDef="let row">{{row.tmstamp}}</td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th class="button" mat-header-cell *matHeaderCellDef>
+        </th>
+        <td mat-cell *matCellDef="let row" class="text-right">
+          <button mat-icon-button color="primary" class="href" (click)="searchForDeal(row)">交易详情</button>
+        </td>
+      </ng-container>
+    </table>
+
+  </mat-card-content>
+  <!--分页-->
+  <mat-paginator [pageSizeOptions]="[10]"
+                 showFirstLastButtons
+                 [length]="page.totalElements"
+                 [pageSize]="page.pageSize"
+                 [pageIndex]="page.pageNum"
+                 (page)="pageChanged($event)">
+  </mat-paginator>
+
+</mat-card>
+
