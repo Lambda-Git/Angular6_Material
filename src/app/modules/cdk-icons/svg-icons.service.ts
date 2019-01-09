@@ -13,11 +13,10 @@ export class SvgIconsService {
   ) {
   }
 
-  init(){
-      console.log('SVG Icons inited');
-    this._matIconRegistry.addSvgIcon(`file_pdf`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/file-pdf.svg`));
-    this._matIconRegistry.addSvgIcon(`file_word`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/file-word.svg`));
-    this._matIconRegistry.addSvgIcon(`certificate`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/certificate.svg`));
-    this._matIconRegistry.addSvgIcon(`baseline-reorder`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icons/baseline-reorder.svg`));
+  init() {
+    console.log('SVG Icons inited!');
+    this._matIconRegistry.addSvgIcon(`password`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icon/password.svg`));
+    this._matIconRegistry.addSvgIcon(`watch`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icon/watch.svg`));
+    this._matIconRegistry.addSvgIcon(`noWatch`, this._domSanitizer.bypassSecurityTrustResourceUrl(`./assets/icon/noWatch.svg`));
   }
 }

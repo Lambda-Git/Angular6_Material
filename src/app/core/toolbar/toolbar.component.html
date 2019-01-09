@@ -1,5 +1,41 @@
 <!-- <stbui-loading *ngIf="showLoading"></stbui-loading> -->
 <mat-toolbar   class="mat-elevation-z4">
-	<!--挪到了auth.component.html中-->
+	  <!--<button mat-icon-button (click)="sidenav.toggle();drawer?.toggle();" *ngIf="matDrawerShow">
+        <i class="material-icons app-toolbar-menu">menu </i>
+    </button>
+    <button mat-icon-button (click)="sidenav.toggle();" *ngIf="!matDrawerShow">
+        <i class="material-icons app-toolbar-menu">menu </i>
+    </button>
+    <h1>区块链数据库系统</h1>-->
+    <div class="menu_top" fxLayout="row">
+
+      <button mat-menu-item>系统概览</button>
+      <button mat-menu-item [matMenuTriggerFor]="MDBConfig">MDB配置</button>
+          <mat-menu #MDBConfig="matMenu">
+            <button mat-menu-item>区块链数据服务</button>
+            <button mat-menu-item>区块链接口服务</button>
+            <button mat-menu-item>区块链系统配置</button>
+            <button mat-menu-item>区块链用户管理</button>
+          </mat-menu>
+      <button mat-menu-item [matMenuTriggerFor]="systemSet">系统设置</button>
+          <mat-menu #systemSet="matMenu">
+            <button mat-menu-item>管理用户</button>
+            <button mat-menu-item>关于....</button>
+          </mat-menu>
+
+    </div>
+    <span class="spacer"></span>
+
+    <!-- <button  mat-icon-button (click)="searchOpen = !searchOpen" fxHide="true" [fxHide.gt-xs]="false"> -->
+        <!-- <i class="material-icons">search</i> -->
+    <!-- </button> -->
+    <cdk-search-bar [open]="searchOpen"></cdk-search-bar>
+
+    <button  mat-icon-button (click)="doSaveConfig()"><i class="material-icons">save</i></button>
+    <cdk-fullscreen></cdk-fullscreen>
+
+    <!-- <cdk-toolbar-notification [notifications]="toolbarHelpers?.notifications"></cdk-toolbar-notification> -->
+
+    <cdk-user-menu [currentUser]="toolbarHelpers?.currentUser"></cdk-user-menu>
 
 </mat-toolbar>

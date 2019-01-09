@@ -1,41 +1,47 @@
 export const menus = [
     {
-        'name': '配置概览',
+        'name': '系统概览',
         'icon': 'dashboard',
         'link': '/auth/overview',
         'open': true,
         'chip': false,
     },
+
     {
-      'name': '身份管理',
-      'icon': 'account_box',
-      'link': '/auth/config/identity-managent',
-      'open': false,
-    },
-    {
-        'name': '主机管理',
-        'icon': 'computer',
-        'link': '/auth/config/host-managent',
+        'name': 'MDB配置',
+        'icon': 'settings_ethernet',
+        'link': false,
         'open': false,
+        'chip': false,
+        'sub': [
+            {
+                'name': '区块链数据服务',
+                'icon': 'chevron_right',
+                'link': '/auth/config/abci',
+                'open': false,
+            },
+            {
+                'name': '区块链接口服务',
+                'icon': 'chevron_right',
+                'link': '/auth/config/mdbserv',
+                'open': false,
+            },
+            {
+              'name': '区块链系统配置',
+              'icon': 'chevron_right',
+              'link': '/auth/config/distributednode',
+              'open': false,
+            },
+            {
+                'name': '区块链用户管理',
+                'icon': 'chevron_right',
+                'link': '/auth/config/mdbuser',
+                'open': false,
+            },
+        ]
+
     },
-    {
-      'name': '容器配置管理',
-      'icon': 'battery_full',
-      'link': '/auth/config/container-managent',
-      'open': false,
-    },
-    {
-        'name': '通道管理',
-        'icon': 'gps_not_fixed',
-        'link': '/auth/config/passageway-managent',
-        'open': false,
-    },
-    {
-      'name': '消息管理',
-      'icon': 'message',
-      'link': '/auth/config/news-managent',
-      'open': false,
-    },
+
     {
         'name': '系统设置',
         'icon': 'settings',
@@ -43,12 +49,26 @@ export const menus = [
         'open': false,
         'sub': [
             {
-                'name': '用户管理',
+                'name': '管理用户',
                 'link': '/auth/system/users',
                 'icon': 'chevron_right',
                 'chip': false,
                 'open': false,
             },
+            {
+              'name': '关于....',
+              'link': '/auth/system/aboutus',
+              'icon': 'chevron_right',
+              'chip': false,
+              'open': false,
+            },
+            {
+              'name': '用户许可协议',
+              'link': '/auth/system/userlicenseagreement',
+              'icon': 'chevron_right',
+              'chip': false,
+              'open': false,
+            }
         ]
     },
 

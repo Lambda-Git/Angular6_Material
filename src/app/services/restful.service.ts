@@ -1,261 +1,132 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import {AutoUnsubscribe} from 'ngx-auto-unsubscribe';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-import {environment} from '../../environments/environment';
-import {UserAccessService} from './user-access.service';
-import {isArray} from 'util';
-import {McConfirmService} from '../modules/mc-confirm/mc-confirm.service';
+import { Md5 } from 'ts-md5';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { NgxSpinnerService } from 'ngx-spinner';
 
+import { environment } from '../../environments/environment';
 @AutoUnsubscribe()
 @Injectable({
   providedIn: 'root'
 })
 export class RestfulService {
-  private _url(path, service = 'service') {
-    return environment.env[service + '_path'] + path.replace(/^\//, '');
+  private _url(path='/mdbcli', service = 'mdbcli') {
+    let upath = environment.env['mdbcli_server'];
+    let uport = environment.env['mdbcli_port'];
+    console.log(window.location.hostname);
+    if (upath ===  undefined) {
+      upath = window.location.hostname;
+    };
+    if (uport === undefined) {
+      uport = '8080';
+    }
+    return 'http://' + upath + ':' + uport + '/' + path.replace(/^\//, '');
   }
-
   constructor(
     private _http: HttpClient,
     private _router: Router,
-    private _spinner: NgxSpinnerService,
-    private _userAccess: UserAccessService,
-    private _confirm: McConfirmService
+    private _spinner: NgxSpinnerService
   ) {
-    console.log(environment);
   }
 
-  public post(
-    u,
-    p = {},
-    opt: any = {service: 'service', block: true}
-  ): Observable<any> {
-    const s = opt.service == undefined ? 'service' : opt.service;
-    const url = this._url(u, s);
-    const auth = opt.auth === true;
-    const token = this._userAccess.getToken();
-    const appid = btoa(environment.client_id + ':' + environment.client_secret);
-
-    let headers = new HttpHeaders();
-    if (auth) {
-      headers = headers.append('Authorization', 'Basic ' + appid);
-    } else {
-      headers = headers.append('Authorization', 'Bearer ' + token || '');
-      headers = headers.append('token', token);
+  private filterLines(data) {
+    let isValidLine=(line) => {
+      if (line.startsWith('#') || line.startsWith('==') || line=='') {
+        return false;
+      }
+      return true;
     }
-
-    return Observable.create(observer => {
-      if (opt.block !== false) {
-        this._spinner.show();
+    let jdata = [];
+    let lines = data.split(/\n/);
+    lines.forEach(line => {
+      if (isValidLine(line)) {
+        jdata.push(line);
       }
-      this._http.post<any>(url, p, {headers: headers}).subscribe(
-        data => {
-          if (opt.block !== false) {
-            this._spinner.hide();
-          }
-          observer.next(data);
-          observer.complete();
-        },
-        err => {
-          if (opt.block !== false) {
-            this._spinner.hide();
-          }
-          if (err.status === 401) {
-            // Token Change ,need re login
-            this._router.navigate([environment.env.token_err_url]);
-          } else if (err.status == 0) {
-            // this._message.sendMessage(
-            //   err.statusText + '/' + err.message,
-            //   'error'
-            // );
-          } else {
-            /*后台系统异常没有返回信息*/
-            setTimeout(() => {
-              this._confirm.prompt('系统服务调用异常，请检查后重新输入');
-            }, 0);
-          }
-        }
-      );
     });
+    return jdata.join('\n');
   }
-
-  public get(
-    u,
-    p = {},
-    opt: any = {service: 'service', block: true}
-  ): Observable<any> {
-    const s = opt.service == undefined ? 'service' : opt.service;
-    const url = this._url(u, s);
-    const auth = opt.auth === true;
-    const token = this._userAccess.getToken();
-    const appid = btoa(environment.client_id + ':' + environment.client_secret);
-
-    let headers = new HttpHeaders();
-    if (auth) {
-      headers = headers.append('Authorization', 'Basic ' + appid);
-    } else {
-      headers = headers.append('Authorization', 'Bearer ' + token || '');
-      headers = headers.append('token', token);
+  public mdbcli(cmd,args:any='',multiline=false): Observable<any> {
+    var url = this._url();
+    var token = '';//this._userAccess.getToken();
+    let astr = (typeof args === 'string')?args:args.join(' ');
+    let formModel = {
+      module:'mdb',
+      cmd: cmd,
+      args: astr
     }
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      }),
+    };
     return Observable.create(observer => {
-      if (opt.block !== false) {
-        this._spinner.show();
-      }
-      this._http.get<any>(url, {headers: headers}).subscribe(
-        data => {
-          if (opt.block !== false) {
-            this._spinner.hide();
-          }
+      this._http.post(url, formModel, {responseType: 'text'}).subscribe(data => {
+        if ((data == undefined)|| (data == null)) data = '';
+        if (multiline) {
+          observer.next(this.filterLines(data));
+        } else {
           observer.next(data);
-          observer.complete();
-        },
-        err => {
-          if (opt.block !== false) {
-            this._spinner.hide();
-          }
-          if (err.status === 401) {
-            // Token Change ,need re login
-            this._router.navigate([environment.env.token_err_url]);
-          } else if (err.status == 0) {
-          } else {
-            // console.log(err);
-          }
         }
-      );
-    });
-  }
-
-  formPost(
-    u,
-    p = {},
-    opt: any = {service: 'service', block: true, auth: false}
-  ): Observable<any> {
-    const s = opt.service == undefined ? 'service' : opt.service;
-    const auth = opt.auth === true;
-    const url = this._url(u, s);
-    const token = this._userAccess.getToken();
-    //    let formModel = new FormData();
-    const appid = btoa(environment.client_id + ':' + environment.client_secret);
-    const formModel = Object.keys(p)
-      .map(k => k + '=' + p[k])
-      .join('&');
-
-    return Observable.create(observer => {
-      if (opt.block !== false) {
-        this._spinner.show();
-      }
-      let headers = new HttpHeaders();
-      headers = headers.append(
-        'Content-Type',
-        'application/x-www-form-urlencoded'
-      );
-
-      if (auth) {
-        headers = headers.append('Authorization', 'Basic ' + appid);
-      } else {
-        headers = headers.append('Authorization', 'Bearer ' + token || '');
-      }
-
-      // let pp = 'grant_type=password&username=admin&password=123456';
-      this._http.post<any>(url, formModel, {headers: headers}).subscribe(
-        data => {
-          if (opt.block !== false) {
-            this._spinner.hide();
-          }
-          observer.next(data);
-          observer.complete();
-        },
-        err => {
-          this._spinner.hide();
-          if (err.status === 401) {
-            // Token Change ,need re login
-            this._router.navigate([environment.env.token_err_url]);
-          } else {
-            observer.error(err);
-          }
+        observer.complete();
+      }, err => {
+        if (err.status === 401) { // Token Change ,need re login
+          this._router.navigate([environment.env.token_err_url]);
+        } else {
+          observer.error(err);
         }
-      );
-    });
-  }
-
-  uploadFile(
-    u,
-    params,
-    files,
-    opt: any = {service: 'service', block: true, auth: false}
-  ) {
-    const s = opt.service == undefined ? 'service' : opt.service;
-    const url = this._url(u, s);
-    const auth = opt.auth === true;
-    const token = this._userAccess.getToken();
-    const appid = btoa(environment.client_id + ':' + environment.client_secret);
-
-    const formModel = new FormData();
-    Object.keys(params).forEach(k => formModel.append(k, params[k]));
-    formModel.append('token', token);
-    if (isArray(files)) {
-      files.forEach(f => {
-        formModel.append('files', f);
       });
-    } else {
-      formModel.append('files', files);
-    }
-    let headers = new HttpHeaders();
-    /* headers = headers.append(
-      "Content-Type",
-      "application/x-www-form-urlencoded"
-    );  */
+    });
+  }
 
-    if (auth) {
-      headers = headers.append('Authorization', 'Basic ' + appid);
-    } else {
-      headers = headers.append('Authorization', 'Bearer ' + token || '');
-    }
+  public post(u, p = {}, opt: any = { service: 'mdbcli', block: true }): Observable<any> {
+    var s = (opt.service == undefined) ? 'service' : opt.service;
+    var url = this._url(u, s);
+    var token = '';//this._userAccess.getToken();
 
     return Observable.create(observer => {
-      this._spinner.show();
-      this._http.post<any>(url, formModel, {headers: headers}).subscribe(
-        data => {
+      if (opt.block !== false) {
+        this._spinner.show();
+      }
+      this._http.post<any>(url, Object.assign(p, { token: token })).subscribe(data => {
+        if (opt.block !== false) {
           this._spinner.hide();
-          observer.next(data);
-          observer.complete();
-        },
-        err => {
-          this._spinner.hide();
-          if (err.status === 401) {
-            // Token Change ,need re login
-            this._router.navigate([environment.env.token_err_url]);
-          }
         }
-      );
+        observer.next(data);
+        observer.complete();
+      }, err => {
+        if (opt.block !== false) {
+          this._spinner.hide();
+        }
+        if (err.status === 401) { // Token Change ,need re login
+          this._router.navigate([environment.env.token_err_url]);
+        } else {
+          observer.error(err);
+        }
+      });
     });
   }
 
-  download(u, p = {}): Observable<any> {
-    const url = this._url(u);
-    const token = this._userAccess.getToken();
+  public get(u, p = {}): Observable<any> {
+    var url = this._url(u);
+    var token = '';//this._userAccess.getToken();
+
+    //return this._http.post<any>(url,Object.assign(p,{token:token}));
     return Observable.create(observer => {
-      let headers = new HttpHeaders();
-      headers = headers.append('Authorization', 'Bearer ' + token || '');
       this._spinner.show();
-      this._http
-        .post(url, p, {headers: headers, responseType: 'blob'})
-        .subscribe(
-          data => {
-            this._spinner.hide();
-            observer.next(data);
-            observer.complete();
-          },
-          err => {
-            observer.error(err);
-            this._spinner.hide();
-          }
-        );
+      this._http.get<any>(url, p).subscribe(data => {
+        this._spinner.hide();
+        observer.next(data);
+        observer.complete();
+      }, err => {
+        this._spinner.hide();
+      });
     });
   }
+
+  ngOnDestroy() { }
+
 }

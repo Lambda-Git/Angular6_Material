@@ -7,19 +7,23 @@
 }
 .mat-form {
     min-width: 150px;
-    /* max-width: 500px; */
     width: 100%;
     max-width: 100%;
-    /*margin-bottom: 2rem;*/
+    margin-bottom: 2rem;
 }
 .mat-full-width {
     width: 100%
 }
 
+/*content最小高度*/
 .page-container {
-    min-height: 100vh;
+    min-height: 80vh;
 }
 
+.dialog-icon {
+    margin-top:4px;
+    margin-right: .5rem;
+}
 h3.mat-headline {
     margin-bottom: 0px;
 }
@@ -33,9 +37,99 @@ mat-dialog-content {
 .mat-table {
     width:100%;
 }
+
+
+/*menu_top --- css*/
+div.menu_top button.mat-menu-item {
+  height: 64px;
+}
+.mat-elevation-z4 button.first_menu a mat-icon{
+  color: #fff;
+  margin-right: 2px;
+  margin-top: -3px;
+}
+div.menu_top a{
+  text-decoration:none;
+  color: #fff;
+}
+/*div.menu_top .cdk-overlay-pane{
+  margin-top: 64px;
+}*/
+.mat-elevation-z4 .mat-icon-button .mat-icon, .mat-icon-button i {
+  line-height: 22px;
+}
+.mat-elevation-z4 .menu_top button.first_menu:hover{
+  background: #227aac;;
+}
+
+.mat-elevation-z4 .menu_top button.active{
+  background: #227aac;
+}
+
+
+/*MDB-body*/
+div.MDB-body{
+  background-color: whitesmoke;
+}
+mat-card.page-container{
+  border-radius: 8px;
+}
+
+/*表单字段长度--折行梳处理*/
+td.mat-cell{
+  word-break: break-all;
+}
+
+/*当前路径*/
+div.curpath{
+  height: 30px;
+  margin-bottom: 25px;
+  padding-top: 80px;
+}
+div.curpath mat-icon{
+  font-size: 20px;
+}
+
+/*table-list  tr hover-css*/
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: #f5e9d6;
+}
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+/*弹出框--css*/
+form.mat-form div.option{
+  float: left;
+  margin-right: 15px;
+}
+form.mat-form label.options{
+  float: left;
+  margin-right: 15px;
+}
+mat-radio-button+mat-radio-button {
+  margin-left: .5rem;
+}
+mat-dialog-content {
+  padding-bottom: 2rem;
+}
+.mat-form {
+  margin-bottom: 2rem;
+}
 mat-dialog-container.mat-dialog-container{
   border-radius:10px;
 }
-.mat-mini-fab .mat-button-wrapper {
-  padding: 6px 0 10px 0!important;
+mat-card.page-container tr.mat-header-row th{
+  font-size: 14px;
+  color: #04131f;
+}
+
+/*mat-chip*/
+mat-chip{
+  border-radius: 5px;
+  padding: 5px;
+}
+
+div.titleTab{
+  padding-top: 20px;
 }

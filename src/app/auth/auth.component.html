@@ -1,60 +1,113 @@
-<mat-sidenav-container class="container" fullscreen>
-  <mat-sidenav [mode]="sideNavMode" class="sidenav" #sidenav [opened]="sideNavOpened" style="overflow: hidden;">
-    <mat-toolbar color="primary" class="mat-elevation-z4 over" fxLayout="row" fxLayoutAlign="center center">
-      <img src="./assets/images/banner.png" height=36>
-    </mat-toolbar>
-    <cdk-sidemenu #sidemenu></cdk-sidemenu>
-  </mat-sidenav>
-  <mat-sidenav-content style="z-index: auto;overflow: hidden;" #drawer>
-    <mat-toolbar class="mat-elevation-z4 toolbar-header" style="background-color: white">
-      <button mat-icon-button (click)="sidenav.toggle();" *ngIf="matDrawerShow">
-        <i class="material-icons app-toolbar-menu">menu </i>
+<!--top菜单导航栏-->
+<mat-toolbar   class="mat-elevation-z4">
+  <div class="logo">
+    <img src="../../assets/images/banner.png" height=32>
+  </div>
+  <div class="menu_top" fxLayout="row">
+
+    <button class="first_menu" routerLinkActive="active" mat-menu-item >
+      <a [routerLink]="['/auth/overview']"><mat-icon style="color: #fff;">home</mat-icon>概览</a>
+    </button>
+    <button class="first_menu" routerLinkActive="active" mat-menu-item [matMenuTriggerFor]="MDBConfig">
+      <a><mat-icon style="color: #fff;">format_indent_increase</mat-icon>配置</a>
+      <mat-menu #MDBConfig="matMenu" [overlapTrigger]="false">
+        <button mat-menu-item>
+          <a [routerLink]="['/auth/config/abci']"><mat-icon>format_shapes</mat-icon>区块链数据服务</a>
+        </button>
+        <button mat-menu-item>
+          <a [routerLink]="['/auth/config/mdbserv']"><mat-icon>nfc</mat-icon>区块链接口服务</a>
+        </button>
+        <button mat-menu-item>
+          <a [routerLink]="['/auth/config/distributednode']"><mat-icon>developer_board</mat-icon>区块链系统配置</a>
+        </button>
+        <button mat-menu-item>
+          <a [routerLink]="['/auth/config/mdbuser']"><mat-icon>recent_actors</mat-icon>区块链用户管理</a>
+        </button>
+
+      </mat-menu>
+    </button>
+
+    <button class="first_menu" routerLinkActive="active" mat-menu-item>
+      <a [routerLink]="['/auth/search/block']"><mat-icon style="color: #fff;">subtitles</mat-icon>区块</a>
+
+      <button mat-menu-item style="display: none;">
+        <a [routerLink]="['/auth/search/block-deal']"><mat-icon>recent_actors</mat-icon>区块详情</a>
       </button>
-      <button mat-icon-button (click)="sidenav.toggle();" *ngIf="!matDrawerShow">
-        <i class="material-icons app-toolbar-menu">menu </i>
+
+    </button>
+    <button class="first_menu" routerLinkActive="active" mat-menu-item>
+      <a [routerLink]="['/auth/search/assets']"><mat-icon style="color: #fff;">attach_money</mat-icon>资产</a>
+
+      <button mat-menu-item style="display: none;">
+        <a [routerLink]="['/auth/search/assets-deal']"><mat-icon>recent_actors</mat-icon>资产详情</a>
       </button>
-      <h3>区块链节点平台</h3>
-      <div style="width: 100%;height: 100%;position: relative;">
-        <div class="toolbar-user-container" style="float: right">
-          <button mat-button (click)="isOpen = !isOpen" class="toolbar-user-btn" [class.open]="isOpen"
-                  [ngStyle.xs]="{'min-width': '70px'}">
-          <span fxLayout="row" fxLayoutAlign="start center">
-            <mat-icon>account_box</mat-icon>
-            <!--<span class="name" fxHide fxShow.gt-xs>{{currentUser?.currentUserName || Hari}}</span>-->
-            <span class="name" fxHide fxShow.gt-xs> {{user.username}} </span>
-            <mat-icon class="icon" fxHide fxShow.gt-xs>keyboard_arrow_down</mat-icon>
-          </span>
-          </button>
-          <div class="dropdown mat-elevation-z1" [class.open]="isOpen">
-            <div class="content">
-              <mat-nav-list>
-                <mat-list-item (click)="setUserInfo(user)">
-                  <button mat-icon-button>
-                    <mat-icon>settings</mat-icon>
-                  </button>
-                  <a matLine>修改密码</a>
-                </mat-list-item>
-                <mat-divider></mat-divider>
-                <mat-list-item (click)="doLogout()">
-                  <button mat-icon-button>
-                    <mat-icon>settings_power</mat-icon>
-                  </button>
-                  <a matLine>退出</a>
-                </mat-list-item>
-              </mat-nav-list>
-            </div>
-          </div>
-        </div>
-      </div>
-    </mat-toolbar>
-    <div class="components-container-gt-xs"
-         style="background-color: #e4e5e6;padding: 0px;padding-left: 20px;padding-right: 20px;"
-         [ngClass.xs]="'components-container-xs'" fxLayoutGap="10px">
-      <cdk-breadcrumb [sideMenu]="sidemenu">
-      </cdk-breadcrumb>
-      <perfect-scrollbar class="vhs">
-        <router-outlet></router-outlet>
-      </perfect-scrollbar>
+
+    </button>
+    <button class="first_menu" routerLinkActive="active" mat-menu-item [matMenuTriggerFor]="systemSet">
+      <a><mat-icon style="color: #fff;">settings</mat-icon>设置</a>
+      <mat-menu #systemSet="matMenu" [overlapTrigger]="false">
+        <button mat-menu-item>
+          <a [routerLink]="['/auth/system/users']"><mat-icon>group</mat-icon>管理用户</a>
+        </button>
+        <button mat-menu-item>
+          <a [routerLink]="['/auth/system/aboutus']"><mat-icon>local_library</mat-icon>关于....</a>
+        </button>
+      </mat-menu>
+
+    </button>
+
+  </div>
+
+
+  <!--100%撑满中间空白-->
+  <span class="spacer">
+      <!--css3点击伸缩input查询框-->
+    <div class="search-wrap" *ngIf="false">
+       <mat-icon style="position:absolute;line-height:39px;margin-left:4px;">search</mat-icon>
+       <input style="padding-left:24px;" type="text" name="" class="search">
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </span>
+
+  <!--全屏展示-->
+  <cdk-fullscreen></cdk-fullscreen>
+
+  <!--<cdk-user-menu [currentUser]="toolbarHelpers?.currentUser"></cdk-user-menu>-->
+  <!--当前用户管理-->
+  <div class="toolbar-user-container">
+    <button mat-button (click)="isOpen = !isOpen" class="toolbar-user-btn" [class.open]="isOpen" [ngStyle.xs]="{'min-width': '70px'}">
+  		<span fxLayout="row" fxLayoutAlign="start center" style="color: #fff">
+    		<mat-icon>account_box</mat-icon>
+    		<span class="name" fxHide fxShow.gt-xs>Admin</span>
+    		<mat-icon class="icon" fxHide fxShow.gt-xs>keyboard_arrow_down</mat-icon>
+  		</span>
+    </button>
+    <div class="dropdown mat-elevation-z1" [class.open]="isOpen">
+      <div class="out"></div>
+      <div class="in"></div>
+      <div class="content">
+        <mat-nav-list>
+          <mat-list-item>
+            <a matLine >修改密码</a>
+            <button mat-icon-button>
+              <mat-icon>account_circle</mat-icon>
+            </button>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item (click)="loginOut()">
+            <a matLine >退出</a>
+            <button mat-icon-button>
+              <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-nav-list>
+      </div>
+    </div>
+  </div>
+
+
+</mat-toolbar>
+
+<!--body-->
+<div class='MDB-body'>
+  <router-outlet></router-outlet>
+</div>

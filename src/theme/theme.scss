@@ -2,7 +2,7 @@
 @import '../app/auth/auth.component.scss';
 @import '../app/core/sidemenu/sidemenu.component.scss';
 @import '../app/core/sidemenu-item/sidemenu-item.component.scss';
-@import './style.scss';
+
 $mat-light-theme-background: (
   status-bar: map_get($mat-grey, 300),
   app-bar:    map_get($mat-grey, 100),
@@ -28,6 +28,8 @@ $primary : $mat-light-blue;
 $accent  : $mat-orange;
 $warn    : $mat-red;
 
+
+
 $primary-app-primary: mat-palette($primary , 600);
 $primary-app-accent:  mat-palette($accent , 900);
 $primary-app-warn:    mat-palette($warn );
@@ -48,7 +50,6 @@ cdk-sidemenu-item{
 
 @include angular-material-theme($cdk-theme);
 @include auth($cdk-theme);
-@include themeCss($cdk-theme);
 
 html {
   height:100%;

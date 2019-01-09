@@ -22,6 +22,7 @@ export class McConfirmComponent implements OnInit {
     public dialogRef: MatDialogRef<McConfirmComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    console.log(data)
     this.confirmValue = data;
     if (this.confirmValue.option != undefined) {
       this.option = Object.assign(this.option, this.confirmValue.option);

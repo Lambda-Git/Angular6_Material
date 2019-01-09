@@ -1,12 +1,4 @@
 {
-  "production": false,
-  "base_url_href": "/",
-  "service_path": "http://192.168.1.105:9000/",
-  "token_check": 600,
-  "token_err_url": "/login",
-  "session_timeout": 12000,
-  "client_id": "",
-  "client_secret": "",
-  "check_status_delay": 3,
-  "check_status_interval": 60
+  "mdbcli_server": "172.16.10.201",
+  "mdbcli_port": "8078"
 }

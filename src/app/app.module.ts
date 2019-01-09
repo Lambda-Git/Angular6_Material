@@ -1,24 +1,24 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule, APP_INITIALIZER} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import {LazyLoadModule} from './lazy-load/lazy-load.module';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {CoreModule} from './core/core.module';
-import {ServiceModule} from './services/service.module';
-import {NgxSpinnerModule} from 'ngx-spinner';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule , APP_INITIALIZER } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { LazyLoadModule } from './lazy-load/lazy-load.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CoreModule } from './core/core.module';
+import { ServiceModule } from './services/service.module';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
-import {McConfirmModule} from './modules/mc-confirm/mc-confirm.module';
 
-import {AppComponent} from './app.component';
-import {
-  CdkIconsModule,
-  SvgIconsService
-} from './modules/cdk-icons/cdk-icons.module';
+import { McConfirmModule } from './modules/mc-confirm/mc-confirm.module';
+
+import { AppComponent } from './app.component';
+import {CdkIconsModule, SvgIconsService} from './modules/cdk-icons/cdk-icons.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     RouterModule,
@@ -47,5 +47,4 @@ import {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

@@ -1,59 +1,48 @@
-<mat-card class="page-container pt-0" style="border: 1px solid #c8ced3;">
+<!--当前模块路径-->
+<div class="curpath" fxLayout="row">
+  <div>
+    <mat-icon>settings</mat-icon>
+  </div>
+  <div>
+    系统设置
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+  <div>
+    管理用户
+  </div>
+  <div>
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </div>
+</div>
+
+<mat-card class="page-container pt-0">
+  <mat-tab-group>
+    <mat-tab label="管理用户">
       <mat-card-content>
-        <div class="table-filter-bar" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center">
-          <div class="filter-bar-header">
-            <mat-icon>search</mat-icon>
-          </div>
-          <div class="filter-bar-search" fxFlex="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="40px"
-               [formGroup]="baseForm">
-            <div fxFlex="200px">
-              <mat-form-field class="mat-full-width">
-                <input matInput placeholder="用户名" formControlName="username" (change)="getUsers()">
-              </mat-form-field>
-            </div>
-            <div fxFlex="initial" fxFlexAlign="center">
-              <mat-form-field>
-                <mat-select placeholder="是否激活" formControlName="active" (selectionChange)="getUsers()">
-                  <mat-option value="-1">请选择</mat-option>
-                  <mat-option value="1">是</mat-option>
-                  <mat-option value="0">否</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div fxFlex="initial" fxFlexAlign="center">
-              <mat-form-field>
-                <mat-select placeholder="用户角色" formControlName="role" (selectionChange)="getUsers()">
-                  <mat-option value="-1">请选择</mat-option>
-                  <mat-option value="1">系统管理员</mat-option>
-                  <mat-option value="0">普通用户</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <button mat-mini-fab color="primary" matTooltip="增加用户" (click)="addUser()">
-            <mat-icon>add</mat-icon>
-          </button>
-          <button mat-mini-fab color="primary" matTooltip="批量删除" (click)="delsUsers()" [disabled]="rowSelected==0">
-            <mat-icon>delete_forever</mat-icon>
-          </button>
-          <button mat-mini-fab color="primary" matTooltip="刷新" (click)="getUsers()">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </div>
         <table mat-table [dataSource]="users" multiTemplateDataRows>
+          <!--多选框-->
           <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
           <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row" [class.example-expanded-row]="expandedRow === element">
           </tr>
           <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef class="pl-1 pr-1" width=60>
-              <mat-checkbox (change)="toggleSelectAllRows($event)" [checked]="rowSelected == data.length" [indeterminate]="(rowSelected>0) && (rowSelected<data.length)">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                (change)="toggleSelectAllRows($event)"
+                [checked]="rowSelected == users.length"
+                [indeterminate]="(rowSelected>0) && (rowSelected<users.length)">
               </mat-checkbox>
             </th>
-            <td mat-cell *matCellDef="let row" class="pl-1 pr-1">
-              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? onSelectedRow(row) : null" [checked]="row.selected">
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? onSelectedRow(row) : null"
+                [checked]="row.selected">
               </mat-checkbox>
             </td>
           </ng-container>
+          <!--表头字段-->
           <ng-container matColumnDef="username">
             <th mat-header-cell *matHeaderCellDef> 用户名 </th>
             <td mat-cell *matCellDef="let row"> {{row.username}} </td>
@@ -69,54 +58,54 @@
           <ng-container matColumnDef="role">
             <th mat-header-cell *matHeaderCellDef> 角色 </th>
             <td mat-cell *matCellDef="let row">
-              <mat-chip color="accent"  selected *ngIf="row.role == 1">系统管理员</mat-chip>
-              <mat-chip color="primary" selected *ngIf="row.role != 1">普通用户</mat-chip>
-              <!--<div *ngIf="row.role == 1">系统管理员</div>
-              <div *ngIf="row.role != 1">普通用户</div>-->
+              <!--<mat-chip color="accent"  selected *ngIf="row.role == 1">系统管理员</mat-chip>-->
+              <!--<mat-chip color="primary" selected *ngIf="row.role != 1">普通用户</mat-chip>-->
+              <div *ngIf="row.role == 1">系统管理员</div>
+              <div *ngIf="row.role != 1">普通用户</div>
             </td>
           </ng-container>
           <ng-container matColumnDef="active">
             <th mat-header-cell *matHeaderCellDef> 是否激活 </th>
-            <td mat-cell *matCellDef="let row"> {{row.active | status}} </td>
+            <td mat-cell *matCellDef="let row">
+              <div *ngIf="row.active == 1">是</div>
+              <div *ngIf="row.active != 1">否</div>
+            </td>
           </ng-container>
           <ng-container matColumnDef="createDate">
             <th mat-header-cell *matHeaderCellDef> 用户创建时间 </th>
             <td mat-cell *matCellDef="let row"> {{row.createDate}} </td>
           </ng-container>
-          <ng-container matColumnDef="createBy">
-            <th mat-header-cell *matHeaderCellDef> 用户创建人 </th>
-            <td mat-cell *matCellDef="let row"> {{row.createBy}} </td>
-          </ng-container>
+          <!--action--按钮-->
           <ng-container matColumnDef="action">
             <th class="button" mat-header-cell *matHeaderCellDef>
-              <!--<button class="add" mat-flat-button mat-primary (click)="addUser()">增加用户</button>-->
-              <!--<button class="dels" mat-flat-button mat-primary (click)="delsUsers()" [disabled]="rowSelected==0">批量删除</button>-->
-              <!--<button class="refresh" mat-flat-button mat-primary (click)="getUsers()">查询</button>-->
+              <button mat-mini-fab color="primary" matTooltip="增加用户" matTooltipPosition='above' (click)="addUser()">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button class="more_dels" mat-mini-fab color="primary" matTooltip="批量删除" matTooltipPosition='above' (click)="delsUsers()" [disabled]="rowSelected==0">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+              <button mat-mini-fab color="primary" matTooltip="刷新" matTooltipPosition='above' (click)="getUsers()">
+                <mat-icon>refresh</mat-icon>
+              </button>
             </th>
             <td mat-cell *matCellDef="let row" class="text-right">
-              <!--<div *ngIf="row.role != 1">-->
-                <button mat-icon-button color="primary" (click)="removeUser(row)" class="href">
-                  <mat-icon matTooltip="删除用户">delete</mat-icon>
-                </button>
-                <button mat-icon-button color="primary" (click)="updateUser(row)" class="href">
-                  <mat-icon matTooltip="修改用户">edit</mat-icon>
-                </button>
-                <button *ngIf="row.active != 1 " mat-icon-button color="primary" (click)="turnConfigOn(row)" class="href">
-                  <mat-icon matTooltip="激活用户">play_arrow</mat-icon>
-                </button>
-                <button *ngIf="row.active == 1" mat-icon-button color="primary" (click)="turnConfigOff(row)" class="href">
-                  <mat-icon matTooltip="禁用用户">stop</mat-icon>
-                </button>
-              <!--</div>-->
+              <button mat-icon-button color="primary" (click)="removeUser(row)" class="href">
+                <mat-icon matTooltip="删除用户" matTooltipPosition='above'>delete</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="updateUser(row)" class="href">
+                <mat-icon matTooltip="修改用户" matTooltipPosition='above'>edit</mat-icon>
+              </button>
+              <button *ngIf="row.active != 1 " mat-icon-button color="primary" (click)="turnConfigOn(row)" class="href">
+                <mat-icon matTooltip="激活用户" matTooltipPosition='above'>play_arrow</mat-icon>
+              </button>
+              <button *ngIf="row.active == 1" mat-icon-button color="primary" (click)="turnConfigOff(row)" class="href">
+                <mat-icon matTooltip="禁用用户" matTooltipPosition='above'>stop</mat-icon>
+              </button>
             </td>
           </ng-container>
         </table>
       </mat-card-content>
-      <mat-paginator [pageSizeOptions]="[5,10]"
-                     showFirstLastButtons
-                     [length]="page.totalElements"
-                     [pageSize]="page.pageSize"
-                     [pageIndex]="page.pageNum - 1"
-                     (page)="pageChanged($event)"></mat-paginator>
-
+    </mat-tab>
+  </mat-tab-group>
 </mat-card>
+

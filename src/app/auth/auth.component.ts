@@ -1,31 +1,23 @@
-import {Component, OnInit, Input, HostListener, ElementRef} from '@angular/core';
-import {MediaChange, ObservableMedia} from '@angular/flex-layout';
-import {ChangePasswordComponent} from './change-password/change-password.component';
-import {LoginService} from '../services/login.service';
-import {MatDialog} from '@angular/material';
+import { Component, OnInit, Input, HostListener, ElementRef } from '@angular/core';
+import { MediaChange, ObservableMedia } from '@angular/flex-layout';
+import {McConfirmService} from "../modules/mc-confirm/mc-confirm.service";
+import {ConfigService} from "../services/config.service";
+import {Router} from "@angular/router";
+import { LoginService } from '../services/login.service'
+
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
+
 })
 
-export class AuthComponent implements OnInit {
-  @Input() isVisible = true;
-  visibility = 'shown';
-  isOpen = false;
-  user = {
-    username: 'Admin123$',
-    password: '****'
-  };
+export class AuthComponent implements OnInit{
 
-  sideNavOpened = true;
-  matDrawerOpened = false;
-  matDrawerShow = true;
-  sideNavMode = 'side';
+  isOpen: boolean = false;
 
   @Input() currentUser = null;
-
   @HostListener('document:click', ['$event', '$event.target'])
   onClick(event: MouseEvent, targetElement: HTMLElement) {
     if (!targetElement) {
@@ -38,74 +30,25 @@ export class AuthComponent implements OnInit {
     }
   }
 
-  ngOnChanges() {
-    this.visibility = this.isVisible ? 'shown' : 'hidden';
-  }
-
-  constructor(
-    private media: ObservableMedia,
-    private elementRef: ElementRef,
+	constructor(
+    private _router: Router,
     private _login: LoginService,
-    public dialog: MatDialog
-  ) {
-  }
+	  private media: ObservableMedia,
+    private _confirm: McConfirmService,
+    private _config: ConfigService,
+    private elementRef: ElementRef
+  ) { }
 
-  ngOnInit() {
-    this.getLoginUserInfo();
-    this.media.subscribe((mediaChange: MediaChange) => {
-      this.toggleView();
-    });
-  }
+	ngOnInit() {
 
-  /*获取登录人信息*/
-  getLoginUserInfo() {
-    this._login.getCurLoginUser().subscribe(data => {
-      // this.data = data.data.content;
-    });
-  }
+	}
 
-  /*修改用户信息*/
-  setUserInfo(user) {
-    user.password = '';
-    const dialogRef = this.dialog.open(ChangePasswordComponent, {
-      width: '600px',
-      disableClose: true,
-      data: {data: user}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-  }
-
-  /*退出*/
-  doLogout() {
+	/*退出-登录页面*/
+  loginOut() {
     this._login.doLogout();
   }
 
-
-  getRouteAnimation(outlet) {
-    return outlet.activatedRouteData.animation;
-    //return outlet.isActivated ? outlet.activatedRoute : ''
-  }
-
-  toggleView() {
-    if (this.media.isActive('gt-md')) {
-      this.sideNavMode = 'side';
-      this.sideNavOpened = true;
-      this.matDrawerOpened = false;
-      this.matDrawerShow = true;
-    } else if (this.media.isActive('gt-xs')) {
-      this.sideNavMode = 'side';
-      this.sideNavOpened = false;
-      this.matDrawerOpened = true;
-      this.matDrawerShow = true;
-    } else if (this.media.isActive('lt-sm')) {
-      this.sideNavMode = 'over';
-      this.sideNavOpened = false;
-      this.matDrawerOpened = false;
-      this.matDrawerShow = false;
-    }
-  }
-
-
 }
+
+
+

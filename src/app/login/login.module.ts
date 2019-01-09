@@ -6,9 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatIconModule } from "@angular/material/icon";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {FlexLayoutModule} from '@angular/flex-layout';
+
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const appRoutes: Routes = [
     { path: '', component: LoginComponent },
@@ -22,9 +24,12 @@ const appRoutes: Routes = [
     MatCardModule,
     MatButtonModule,
     FlexLayoutModule,
-    RouterModule.forChild(appRoutes),
+    MatIconModule,
+    FormsModule,
     ReactiveFormsModule,
-    FormsModule
+    MatProgressSpinnerModule,
+
+    RouterModule.forChild(appRoutes),
   ],
   declarations: [LoginComponent]
 })

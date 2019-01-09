@@ -1,21 +1,22 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {AuthComponent} from './auth.component';
-import {RouterModule} from '@angular/router';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { AuthComponent } from "./auth.component";
+import { RouterModule } from "@angular/router";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatTabsModule} from '@angular/material';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatListModule} from '@angular/material/list';
-import {MatInputModule} from '@angular/material/input';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatTableModule} from '@angular/material/table';
-import {MatExpansionModule} from '@angular/material/expansion';
-
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatListModule } from "@angular/material/list";
+import { MatInputModule } from "@angular/material/input";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatTableModule } from "@angular/material/table";
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatSelectModule} from '@angular/material/select';
+import { NgxEchartsModule } from 'ngx-echarts';
 import {
   MatPaginatorModule,
   MatSortModule,
@@ -27,18 +28,20 @@ import {
   MatMenuModule,
   MatBottomSheetModule,
   MatDialogModule,
-  MatSelectModule
-} from '@angular/material';
+  MatNativeDateModule,
+  MatDatepickerModule,
+  MatExpansionModule
+} from "@angular/material";
 
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from "@angular/material/card";
 
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
-import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
-import {PERFECT_SCROLLBAR_CONFIG} from 'ngx-perfect-scrollbar';
-import {PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
+import { PERFECT_SCROLLBAR_CONFIG } from "ngx-perfect-scrollbar";
+import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 
-import {appRoutes} from './lazyloader.routes';
+import { appRoutes } from "./lazyloader.routes";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -46,7 +49,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 export function getChinesePaginatorIntl() {
   const paginatorIntl = new MatPaginatorIntl();
-  /*Material 分页标签提示功能*/
+  /*自定义--分页标签提示信息*/
   paginatorIntl.itemsPerPageLabel = '每页:';
   paginatorIntl.nextPageLabel = '下一页';
   paginatorIntl.previousPageLabel = '上一页';
@@ -56,29 +59,28 @@ export function getChinesePaginatorIntl() {
   return paginatorIntl;
 }
 
-import {PipesModule} from '../modules/pipes/pipes.module';
-import {CoreModule} from '../core/core.module';
-import {OverviewComponent} from './overview/overview.component';
-import {UsersComponent} from './system/users/users.component';
-import {UserAddComponent} from './system/users/user-add/user-add.component';
-import {HostManagentComponent} from './config/host-managent/host-managent.component';
-import {ContainerManagentComponent} from './config/container-managent/container-managent.component';
-import {NewsManagentComponent} from './config/news-managent/news-managent.component';
-import {PassagewayManagentComponent} from './config/passageway-managent/passageway-managent.component';
-import {StrategyManagentComponent} from './config/strategy-managent/strategy-managent.component';
-import {HostManagentAddComponent} from './config/host-managent/host-managent-add/host-managent-add.component';
-import {PassagewayManagentAddComponent} from './config/passageway-managent/passageway-managent-add/passageway-managent-add.component';
-import {NewsManagentEditComponent} from './config/news-managent/news-managent-edit/news-managent-edit.component';
-import {IdentityManagentComponent} from './config/identity-managent/identity-managent.component';
-import {IdentityManagentEditComponent} from './config/identity-managent/identity-managent-edit/identity-managent-edit.component';
-import {StrategyManagentEditComponent} from './config/strategy-managent/strategy-managent-edit/strategy-managent-edit.component';
-import {ChangePasswordComponent} from './change-password/change-password.component';
-import {HostContainerComponent} from './config/host-managent/host-container/host-container.component';
 
-import {CaEditComponent} from './config/container-managent/ca-edit/ca-edit.component';
-import {PeerEditComponent} from './config/container-managent/peer-edit/peer-edit.component';
-import {CouchdbEditComponent} from './config/container-managent/couchdb-edit/couchdb-edit.component';
-import { StartContainerComponent } from './config/container-managent/start-container/start-container.component';
+import { PipesModule } from "../modules/pipes/pipes.module";
+import { CoreModule } from "../core/core.module";
+import { OverviewComponent } from "./overview/overview.component";
+import { UsersComponent } from "./system/users/users.component";
+import { UserAddComponent } from "./system/users/user-add/user-add.component";
+import { ABCIComponent } from "./config/abci/abci.component";
+import { AbciAddComponent } from "./config/abci/abci-add.component";
+import { MdbservComponent } from "./config/mdbserv/mdbserv.component";
+import { MdbservEditComponent } from "./config/mdbserv/mdbserv-edit.component";
+import { MdbuserComponent } from "./config/mdbuser/mdbuser.component";
+import { MdbuserEditComponent } from "./config/mdbuser/mdbuser-edit.component";
+import { DistributednodeComponent } from './config/distributednode/distributednode.component';
+import { DistributednodeaddComponent } from './config/distributednode/distributednodeadd.component';
+import { ChainnodeaddComponent } from './config/distributednode/chainnodeadd.component';
+import { AboutusComponent } from './system/aboutus/aboutus.component';
+import { BlockComponent } from './search/block/block.component';
+import { AssetsComponent } from './search/assets/assets.component';
+import { AssetsDealComponent } from './search/assets-deal/assets-deal.component';
+import { BlockDealComponent } from './search/block-deal/block-deal.component';
+import { BlockDealDetailComponent } from './search/block-deal-detail/block-deal-detail.component';
+import { OverviewChart1Component } from './overview/overview-chart1/overview-chart1.component';
 
 @NgModule({
   imports: [
@@ -91,6 +93,7 @@ import { StartContainerComponent } from './config/container-managent/start-conta
     MatIconModule,
     MatTabsModule,
     MatFormFieldModule,
+    NgxEchartsModule,
     MatPaginatorModule,
     MatSortModule,
     MatCheckboxModule,
@@ -101,12 +104,15 @@ import { StartContainerComponent } from './config/container-managent/start-conta
     MatInputModule,
     MatChipsModule,
     MatTableModule,
+    MatGridListModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     MatExpansionModule,
+    MatSelectModule,
     MatCardModule,
     MatMenuModule,
     MatBottomSheetModule,
     MatDialogModule,
-    MatSelectModule,
     FlexLayoutModule,
     CoreModule,
     MatSidenavModule,
@@ -118,23 +124,24 @@ import { StartContainerComponent } from './config/container-managent/start-conta
     OverviewComponent,
     UsersComponent,
     UserAddComponent,
-    HostManagentComponent,
-    ContainerManagentComponent,
-    NewsManagentComponent,
-    PassagewayManagentComponent,
-    StrategyManagentComponent,
-    HostManagentAddComponent,
-    PassagewayManagentAddComponent,
-    NewsManagentEditComponent,
-    IdentityManagentComponent,
-    IdentityManagentEditComponent,
-    StrategyManagentEditComponent,
-    ChangePasswordComponent,
-    HostContainerComponent,
-    CaEditComponent,
-    PeerEditComponent,
-    StartContainerComponent,
-    CouchdbEditComponent
+    ABCIComponent,
+    AbciAddComponent,
+    MdbservComponent,
+    MdbservEditComponent,
+    MdbuserComponent,
+    MdbuserEditComponent,
+    MdbuserComponent,
+    MdbuserEditComponent,
+    DistributednodeComponent,
+    DistributednodeaddComponent,
+    BlockComponent,
+    AssetsComponent,
+    AssetsDealComponent,
+    BlockDealComponent,
+    BlockDealDetailComponent,
+    OverviewChart1Component,
+    ChainnodeaddComponent,
+    AboutusComponent
   ],
   providers: [
     {
@@ -144,23 +151,11 @@ import { StartContainerComponent } from './config/container-managent/start-conta
     {
       provide: MatPaginatorIntl,
       useValue: getChinesePaginatorIntl()
-    }
+    },
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  entryComponents: [
-    UserAddComponent,
-    HostManagentAddComponent,
-    PassagewayManagentAddComponent,
-    NewsManagentEditComponent,
-    IdentityManagentEditComponent,
-    StrategyManagentEditComponent,
-    ChangePasswordComponent,
-    UsersComponent,
-    HostContainerComponent,
-    CaEditComponent,
-    PeerEditComponent,
-    CouchdbEditComponent,
-    StartContainerComponent
-  ]
+  entryComponents: [UserAddComponent, AbciAddComponent, MdbservEditComponent,
+    MdbuserEditComponent,DistributednodeaddComponent,ChainnodeaddComponent]
 })
-export class AuthModule {
-}
+export class AuthModule {}

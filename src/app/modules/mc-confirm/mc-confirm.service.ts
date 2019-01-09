@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { Observable } from 'rxjs';
+import { Confirm } from "./confirm.interface";
 import { McConfirmComponent } from './mc-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material';
@@ -13,12 +15,13 @@ export class McConfirmService {
   openDialog(confirmValue) {
     const dialogRef = this._dialog.open(McConfirmComponent, {
       data: confirmValue,
-      disableClose: true
+      disableClose:true
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('The dialog was closed');
+      console.log('The dialog was closed');
     });
+     
   }
   confirm(confirmValue: any) {
     this.openDialog(confirmValue);
@@ -26,18 +29,17 @@ export class McConfirmService {
   prompt (confirmValue: any) {
     if (typeof confirmValue == 'string') {
       confirmValue = {
-        message: confirmValue,
-        option: {
-          promptOnly: true,
-          title: '提示'
+        message:confirmValue,
+        option:{
+          promptOnly:true,title:'提示'
         }
-      };
+      }
     } else {
-      confirmValue.option = Object.assign({}, confirmValue.option, {promptOnly: true, title: '提示'});
+      confirmValue.option = Object.assign({},confirmValue.option,{promptOnly:true,title:'提示'});
     }
     this.openDialog(confirmValue);
   }
-  alert(message, action= '关闭') {
+  alert(message,action='关闭') {
     this._snackBar.open(message, action, {
       duration: 5000,
     });

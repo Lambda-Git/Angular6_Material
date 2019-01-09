@@ -1,13 +1,8 @@
 .breadcrumb {
     display: flex;
-    color: #20a8d8;
-    font-size: 15px;
+    color: #23282c;
+    font-size: 14px;
     justify-self: center;
-    background-color: #f0f3f5;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    border: 1px solid #c8ced3;
-    border-bottom: none;
 }
 
 .breadcrumb-item {
@@ -21,5 +16,5 @@
     padding-right: .5rem;
     padding-left: .5rem;
     color: #73818f;
-    content: "/";
+    content: "|";
 }

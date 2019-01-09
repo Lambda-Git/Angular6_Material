@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {observable, Observable} from 'rxjs';
+
 import { RestfulService } from './restful.service';
+import { CliArgs } from './cli.args';
+import {observeOn} from "rxjs/operators";
+import {tryCatch} from "rxjs/internal-compatibility";
 
 @Injectable({
   providedIn: 'root'
@@ -11,494 +15,539 @@ export class ConfigService {
     private _restful: RestfulService
   ) { }
 
-  /*查询主机*/
-  public getHostListInfo(q, page): Observable<any> {
-    const u = Object.assign({}, q, page);
-    u.active = 1;
+  public getConfigs(confKey): Observable<any> {
+    let CONF = new CliArgs(confKey);
     return Observable.create(observer => {
-      this._restful
-        .post('saas/host/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
+      this._restful.mdbcli(CONF.list,'',true).subscribe(data => {
+        observer.next(CONF.getConfigList(data));
+        observer.complete();
+      })
+    })
   }
 
-  /*根据主机id查询容器*/
-  public getContainerByHOst(row): Observable<any> {
-    const u = {
-      id: row
-    };
+  public addConfig(confKey,row): Observable<any> {
+    let CONF = new CliArgs(confKey);
+    let args = CONF.toArgs(row);
     return Observable.create(observer => {
-      this._restful
-        .post('saas/host/list/container', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
+      this._restful.mdbcli(CONF.add,args).subscribe(data => {
+        observer.next(data == '');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
   }
 
-  /*根据主机id、容器id查询info*/
-  public getContainerInfo(row): Observable<any> {
-    const u = {
-      containerID: row.containerID,
-      hostID: row.hostID
-    };
+  public removeConfig(confKey,name): Observable<any> {
+    let CONF = new CliArgs(confKey);
     return Observable.create(observer => {
-      this._restful
-        .post('saas/container/info', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-
+      this._restful.mdbcli(CONF.remove,name).subscribe(data => {
+        observer.next(data=='');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
   }
 
-  /*重启容器*/
-  public rebootContainer(row): Observable<any> {
-    const u = {
-      hostID : row.hostID,
-      containerID : row.containerID,
-    };
+  public turnConfigOn(confKey,name): Observable<any> {
+    let CONF = new CliArgs(confKey);
     return Observable.create(observer => {
-      this._restful
-        .post('saas/container/restart', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-
+      this._restful.mdbcli(CONF.turn,[name,'ON']).subscribe(data => {
+        observer.next(data == '');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
+  }
+  public turnConfigOff(confKey,name): Observable<any> {
+    let CONF = new CliArgs(confKey);
+    return Observable.create(observer => {
+      this._restful.mdbcli(CONF.turn,[name,'OFF']).subscribe(data => {
+        observer.next(data == '');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
   }
 
-
-  /*kill容器*/
-  public killContainer(row): Observable<any> {
-    const u = {
-      hostID : row.hostID,
-      containerID : row.containerID,
-    };
+  public getConfigStatus(confKey,name): Observable<any> {
+    let CONF = new CliArgs(confKey);
     return Observable.create(observer => {
-      this._restful
-        .post('saas/container/kill', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-
+      this._restful.mdbcli(CONF.show,name).subscribe(data => {
+        observer.next(CONF.cli2json(data));
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
   }
 
-  /*新增或编辑主机*/
-  public doCreateHOst(host): Observable<any> {
-    if (host.id == undefined) {
-      /*新增主机*/
-      const u = {
-        active: 1,
-        domain: host.domain,
-        ip: host.ip,
-        name: host.name,
-        port: host.port,
-        protocol: host.protocol,
-        type: host.type,
+  public saveAllConfig(): Observable<any> {
+    return Observable.create(observer => {
+      this._restful.mdbcli('saverun').subscribe(data => {
+        observer.next(data=='');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
+  }
 
-      };
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/host/add', u)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+  // 用户管理--查询服务
+  public getUserManagement(): Observable<any> {
+    return Observable.create(observer => {
+      this._restful.mdbcli('showrun user').subscribe(data => {
+        /*根据换行截取*/
+        let lines = data.split(/(\n)/g);
+        let rows = [];
+        lines.forEach(line => {
+          let m = line.match('user_add');
+          if (m != null && m != '') {
+            /*根据空格截取*/
+            let rowLines = line.split(/[\s,]+/);
+            /*拼接row对象*/
+            let columns = ['name', 'pwd', 'notify'];
+            let row = {};
+            columns.forEach((col, idx) => {
+              let colName = col;
+              let val = (rowLines[idx + 1] != undefined) ? rowLines[idx + 1] : '';
+              row[colName] = (val == 'NULL') ? '' : val;
+            })
+
+            rows.push(row);
+
+          }
+        })
+        observer.next(rows);
+        observer.complete();
+      })
+    })
+  }
+
+  /*用户管理-状态值查询*/
+  public getUserManageStatus(name): Observable<any> {
+    return Observable.create(observer => {
+      this._restful.mdbcli('showrun user').subscribe(data => {
+        let lines = data.split(/(\n)/g);
+        let datas = [];
+        let status = '';
+        lines.forEach(line =>{
+          let m = line.match(name);
+          let k = [];
+          if (m != null && m != '') {
+            let lineArray = line.split(/[\s,]+/);
+            if(lineArray.length < 4){
+              status = lineArray[2];
             }
-            observer.next(data);
-            observer.complete();
-          });
-      });
-    } else {
-      /*修改主机*/
-      const u = {
-        id: host.id,
-        active: 0,
-        name: host.name,
-        domain: host.domain,
-      };
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/host/update', u)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+          }
+        })
+        /*如果没有取到status 默认为关闭状态*/
+        if(status == '' ){
+          observer.next('OFF');
+          observer.complete();
+        }else{
+          observer.next('ON');
+          observer.complete();
+        }
+
+      })
+    })
+  }
+
+  /*用户管理--新增或者编辑 */
+  public saveOrUpdateManagement(confKey,row): Observable<any> {
+    let CONF = new CliArgs(confKey);
+    let args = CONF.toArgs(row);
+    return Observable.create(observer => {
+      this._restful.mdbcli('user_add',args).subscribe(data => {
+        observer.next(data=='');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
+  }
+
+  /*用户管理--开启配置服务*/
+  public turnUserManageOn(confKey,name): Observable<any> {
+    let CONF = new CliArgs(confKey);
+    return Observable.create(observer => {
+      this._restful.mdbcli(CONF.turn,[name,'ON']).subscribe(data => {
+        observer.next(data == '');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
+  }
+
+  /*用户管理--关闭配置服务*/
+  public turnUserManageOff(confKey,name):Observable<any> {
+    let CONF = new CliArgs(confKey);
+    return Observable.create(observer => {
+      this._restful.mdbcli(CONF.turn,[name,'OFF']).subscribe(data => {
+        observer.next(data == '');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
+  }
+
+
+
+  /*用户服务--获取user_set参数*/
+  public getUserService(): Observable<any> {
+    return Observable.create(observer => {
+      this._restful.mdbcli('showrun user').subscribe(data => {
+        /*根据换行截取*/
+        let lines = data.split(/(\n)/g);
+        let rows = [];
+        lines.forEach(line => {
+          let m = line.match('user_set');
+          if (m != null && m != '') {
+            /*根据空格截取*/
+            let rowLines = line.split(/[\s,]+/);
+            if(rowLines.length > 2){
+              /*拼接row对象*/
+              let columns = ['servstr', 'secs'];
+              let row = {};
+              columns.forEach((col, idx) => {
+                let colName = col;
+                let val = (rowLines[idx + 1] != undefined) ? rowLines[idx + 1] : '';
+                row[colName] = (val == 'NULL') ? '' : val;
+              })
+              rows.push(row);
             }
-            observer.next(data);
+          }
+        })
+        observer.next(rows);
+        observer.complete();
+
+
+      })
+    })
+  }
+
+  /*用户服务--user_set*/
+  public userSet(confKey,row):Observable<any> {
+    let CONF = new CliArgs(confKey);
+    let args = CONF.toArgs(row);
+    return Observable.create(observer => {
+      this._restful.mdbcli('user_set ',args).subscribe(data => {
+        observer.next(data == '');
+        observer.complete();
+      },err => {
+        observer.next(false);
+        observer.complete();
+      })
+    })
+  }
+/**************************系统概览--查询********************************/
+  /*MAXCHAIN--一条链*/
+  public getMDBChannel(row): Observable<any> {
+    let args = row;
+    return Observable.create(observer => {
+      this._restful.mdbcli('mdbserv_chaincmd',args).subscribe(data => {
+          if(data != ''){
+            /*后台返回为字符串-转为json格式*/
+            observer.next(JSON.parse(data));
             observer.complete();
-          });
+          }
       });
-    }
+    })
   }
 
-  /*删除主机*/
-  public delHost(id): Observable<any> {
-    const u = {
-      id: id,
-    };
+  /*根据链查询的块高度查询总交易量*/
+  public getTotalDeal(row): Observable<any> {
+    let args = row;
     return Observable.create(observer => {
-      this._restful
-        .post('saas/host/delete', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
+      this._restful.mdbcli('mdbserv_chaincmd',args).subscribe(data => {
+        if(data != ''){
+          /*后台返回为字符串-转为json格式*/
+          observer.next(JSON.parse(data));
           observer.complete();
-        });
-    });
+        }
+      });
+    })
   }
 
-  /*查询我的主身份*/
-  public getIdentityInfo(q, page): Observable<any> {
-    const u = Object.assign({}, q, page);
+  /*链上的节点列表*/
+  public getNodeData(row):Observable<any> {
+    let args = row;
     return Observable.create(observer => {
-      this._restful
-        .post('saas/ca/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data.data);
-          observer.complete();
-        });
-    });
-  }
-
-  /*我的身份保存--更新我的身份*/
-  public doOrgCardSave(data): Observable<any> {
-    if (data.id == undefined ) {
-      /*我的身份保存*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/ca/save', data)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+      this._restful.mdbcli('tmconf_show',args).subscribe(data =>{
+        if(data != ''){
+          /*定义json格式*/
+          const nodeData = {
+            status:'',
+            nodeList:[]
+          };
+          //根据换行截取
+          let lines = data.split(/(\n)/g);
+          lines.splice(0,1);
+          /*取当前节点参数*/
+          let lines_1 = lines[1].split(/[\s,]+/);
+          lines_1.forEach( rowline => {
+            let a = rowline.match('status');
+            if (a != null && a != '') {
+              let begin = rowline.indexOf('(');
+              let last = rowline.indexOf(')');
+              nodeData.status = rowline.substring(begin+1,last);
             }
-            observer.next(data);
-            observer.complete();
           });
-      });
-    } else {
-      /*更新我的身份*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/ca/update', data)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+          /*取所有节点信息*/
+          lines.splice(0,3);
+          lines.forEach( nodeLine => {
+            /*过滤掉空串对象*/
+            if(nodeLine.length > 2) {
+              /*根据空格截取为数组*/
+              let nodeInfoData =  nodeLine.split(/[\s,]+/);
+                /*2-5为取的参数*/
+                let nodeList = {
+                  name:'',
+                  addres:'',
+                  power:'',
+                  pubkey:'',
+                  status:''
+                }
+                nodeList.name =  nodeInfoData[1];
+                nodeList.addres = nodeInfoData[2];
+                nodeList.power = nodeInfoData[3];
+                nodeList.pubkey = nodeInfoData[4];
+                nodeList.status = nodeInfoData[nodeInfoData.length - 1];
+                /*push到json串中*/
+                nodeData.nodeList.push(nodeList);
             }
-            observer.next(data);
-            observer.complete();
-          });
-      });
-    }
-
-  }
-
-  /*查询所有的身份信息列表*/
-  public geAlltIdentityInfo(q, page): Observable<any> {
-    const u = Object.assign({}, q, page);
-    return Observable.create(observer => {
-      this._restful
-        .post('saas/org/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
+          })
+          observer.next(nodeData);
           observer.complete();
-        });
-    });
+        }
+      })
+    })
   }
 
-  /*容器配置管理服务*/
-
-  /*ca查询*/
-  public getCa(q, page): Observable<any> {
-    const u = Object.assign({}, q, page);
-    u.type = 'CA';
+  /*查询每秒钟交易数量*/
+  public getDealSecond(row): Observable<any> {
+    let args = row;
     return Observable.create(observer => {
-      this._restful
-        .post('saas/config/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
-
-  /*新增或编辑ca*/
-  public doCaSave(row): Observable<any> {
-    if (row.id == undefined) {
-      /*新增ca*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/config/ca', row)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+      this._restful.mdbcli('mdbserv_show',args).subscribe(data => {
+        if(data != ''){
+          let dealSecond = '';
+          //根据换行截取
+          let lines = data.split(/(\n)/g);
+          lines.splice(0,1);
+          let lines_1 = lines[1].split(/[\s,]+/);
+          lines_1.forEach( lineData => {
+            let a = lineData.match('rate');
+            if (a != null && a != '') {
+              let begin = lineData.indexOf('(');
+              let last = lineData.indexOf(')');
+              dealSecond = lineData.substring(begin+1,last);
             }
-            observer.next(data);
-            observer.complete();
-          });
-      });
-    } else {
-      /*修改ca*/
+          })
 
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/config/ca', row)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+          observer.next(dealSecond);
+          observer.complete();
+        }
+      });
+    })
+  }
+
+  /*查询块的总数量*/
+  public getAllBlock(row): Observable<any> {
+    let args = row;
+    return Observable.create(observer => {
+      this._restful.mdbcli('mongoget',args).subscribe(data => {
+        if(data != undefined){
+          observer.next(data);
+          observer.complete();
+        }
+      });
+    })
+  }
+
+
+  /*最新5个区块列表*/
+  public getBlockList(row): Observable<any> {
+    let args = row;
+    return Observable.create(observer => {
+      this._restful.mdbcli('mongoget',args).subscribe(data => {
+        /*error表示后台系统异常*/
+        let errorData = data.split(/(\n)/g)[0];
+        if(errorData != 'error'){
+          observer.next(JSON.parse(data));
+          observer.complete();
+        }
+      });
+    })
+  }
+
+  /*查询资产表名*/
+  public getAssetsNames(row): Observable<any> {
+    let args = row;
+    return Observable.create(observer => {
+      this._restful.mdbcli('mongotab',args).subscribe(data => {
+        if(data != ''){
+          /*按照都逗号分隔字符串*/
+          let assetsNameAry = [];
+          /*以换行截取，取第一个为data;避免最后个表名带有换行参数*/
+          data.split(/(\n)/g)[0].split(',').forEach( rowData => {
+            /*去掉block、_20、file等非资产表*/
+            let a = rowData.match('block');
+            let b = rowData.match('_20');
+            let c = rowData.match('file');
+            if( a == null && b == null && c == null) {
+              assetsNameAry.push(rowData);
             }
-            observer.next(data);
-            observer.complete();
           });
+          observer.next(assetsNameAry);
+          observer.complete();
+        }
       });
-    }
+    })
   }
 
-  /*启动ca*/
-  public setOnHost(row): Observable<any> {
-    const u = {
-      configID: row.configID,
-      hostID: row.id,
-    };
+  /*根据表名查询+条件==资产列表*/
+  public getAssetsList(row): Observable<any> {
+    let args = row;
     return Observable.create(observer => {
-      this._restful
-        .post('saas/container/start', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
+      this._restful.mdbcli('mongoget',args).subscribe(data => {
+        if(data.substring(1,6) == 'error'){
+          /*后台系统报错*/
+          console.log(data);
+        }
+        if(data != ''){
+          console.log(data);
+          let arrayData = JSON.parse(data);
+          let array =data.split('},');
+          array.forEach( (arrData,index) => {
+            let assetid = '';
+            let createtx = '';
+            let lasttx = '';
+            arrData.split(',').forEach( lineData => {
+              let a = lineData.match('"assetid"');
+              if (a != null && a != '') {
+                let begin = lineData.indexOf(':');
+                let last = lineData.length;
+                /*空格占了一个字符串+1*/
+                assetid = lineData.substring(begin+2,last);
+              }
 
-  /*peer查询*/
-  public getPeer(q, page): Observable<any> {
-    const u = Object.assign({}, q, page);
-    u.type = 'PEER';
-    return Observable.create(observer => {
-      this._restful
-        .post('saas/config/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
+              let b = lineData.match('"createtx"');
+              if( b != null && b != '') {
+                let begin = lineData.indexOf(':');
+                let last = lineData.length;
+                createtx = lineData.substring(begin+2,last);
+              }
 
-  /*新增或编辑peer*/
-  public doPeerSave(row): Observable<any> {
-    if (row.id == undefined) {
-      /*新增peer*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/config/peer', row)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
+              let c = lineData.match('"lasttx"');
+              if(c != null && c != '') {
+                let begin = lineData.indexOf(':');
+                let last = lineData.length;
+                lasttx = lineData.substring(begin+2,last);
+              }
+
+            })
+            if( arrayData != 0) {
+              if(arrayData.length != undefined){
+                arrayData[index].assetid = assetid;
+                arrayData[index].createtx = createtx;
+                arrayData[index].lasttx = lasttx;
+              } else {
+                /*length为undefine为单个对象*/
+                arrayData.assetid = assetid;
+                arrayData.createtx = createtx;
+                arrayData.lasttx = lasttx;
+              }
+            } else {
+              /*arrayData == 0 查询数据为0条  赋空值*/
+              arrayData = [];
             }
-            observer.next(data);
-            observer.complete();
-          });
+          })
+          observer.next(arrayData);
+          observer.complete();
+        }
       });
-    } else {
-      /*修改peer*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/config/peer', row)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
-            }
-            observer.next(data);
-            observer.complete();
-          });
+    })
+  }
+
+  /*查询当前资产表名里资产总数量*/
+  public getCurAssetsCount(row): Observable<any> {
+    let args = row;
+    return Observable.create(observer => {
+      this._restful.mdbcli('mongoget',args).subscribe(data => {
+          observer.next(data);
+          observer.complete();
       });
-    }
+    })
   }
 
-  /*peer ---设为anchorPeer/取消anchorPeer */
-  public turnAnchorPeer(row): Observable<any> {
-    const u = {
-      id: row.id,
-      anchorPeer: row.anchorPeer,
-    };
+  /*查询所有交易表名*/
+  public getDealTableName(row): Observable<any> {
+    let args = row;
     return Observable.create(observer => {
-      this._restful
-        .post('saas/config/peer/anchor', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
-
-  /*couchdb查询*/
-  public getCouchdb(q, page): Observable<any> {
-    const u = Object.assign({}, q, page);
-    u.type = 'COUCHDB';
-    return Observable.create(observer => {
-      this._restful
-        .post('saas/config/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
-
-  /*新增或编辑couchdb*/
-  public doCouchdbSave(row): Observable<any> {
-    if (row.id == undefined) {
-      /*新增couchdb*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/config/couchdb', row)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
-            }
-            observer.next(data);
-            observer.complete();
+      this._restful.mdbcli('mongotab',args).subscribe(data => {
+        let datas = 'txtab_201808,txtab_201809,txtab_201810,txtab_201811,txtab_201812,txtab_201901';
+        if(data != '') {
+          let newDatas = [];
+          //以换行截取去掉换行导致的空串，再以','截取
+          datas.split(/(\n)/g)[0].split(',').forEach( rowData => {
+            let obj = {
+              dealTableName:'',
+              time:''
+            };
+            let year = rowData.substring(rowData.indexOf('_')+1,rowData.indexOf('_')+5);
+            let month = rowData.substring(rowData.indexOf('_')+5,rowData.indexOf('_')+7);
+            obj.dealTableName = rowData;
+            obj.time = year + month;
+            newDatas.push(obj);
           });
+          observer.next(newDatas);
+          observer.complete();
+        }
       });
-    } else {
-      /*修改couchdb*/
-      return Observable.create(observer => {
-        this._restful
-          .post('saas/config/couchdb', row)
-          .subscribe(data => {
-            if (data.code != 0) {
-              observer.error(data.message);
-              return;
-            }
-            observer.next(data);
-            observer.complete();
-          });
+    })
+  }
+
+  /*根据资产表名(时间：年月)+资产id查询资产交易记录*/
+  public getRecordList(row): Observable<any> {
+    let args = row;
+    return Observable.create(observer => {
+      this._restful.mdbcli('mongoget',args).subscribe(data => {
+        if(data.split(/(\n)/g)[0] != '0') {
+          observer.next(JSON.parse(data));
+        }else{
+          observer.next('0');
+        }
+        observer.complete();
       });
-    }
+    })
   }
 
-
-  /*获取通道*/
-  public getPassway( q, page ): Observable<any> {
-    const u = Object.assign({}, q, page);
+  /*根据资产表名(时间：年月)+资产id查询资产交易记录--总数
+  *  暂未用
+  * */
+  public getRecordListCount(row): Observable<any> {
+    let args = row;
     return Observable.create(observer => {
-      this._restful
-        .post('saas/channel/page', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
+      this._restful.mdbcli('mongoget',args).subscribe(data => {
+        observer.next(data);
+        observer.complete();
+      });
+    })
   }
 
-  /*查询没有被使用共识名称consensus*/
-  public getConsensus(): Observable<any> {
-    const u = {
-      used: false
-    };
-    return Observable.create(observer => {
-      this._restful
-        .post('saas/consensus/list', u)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
-
-  /*新增通道/更新通道*/
-  public addPassWay(row): Observable<any> {
-    /*增加通道*/
-    const u = {
-      genesisBlock: true,
-    }
-    const w = Object.assign({}, row, u);
-    return Observable.create(observer => {
-      this._restful
-        .post('saas/channel/add', w)
-        .subscribe(data => {
-          if (data.code != 0) {
-            observer.error(data.message);
-            return;
-          }
-          observer.next(data);
-          observer.complete();
-        });
-    });
-  }
 }

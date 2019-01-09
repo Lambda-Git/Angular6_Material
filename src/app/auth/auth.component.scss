@@ -21,28 +21,12 @@
         width: 100%;
     }
     .logo{
-        font-size: 26px;font-family: Roboto;color:white;margin-top: 8px;
+        font-size: 26px;font-family: Roboto;color:white;
     }
-}
-
-mat-toolbar.over {
-    background-color:#fff;
-}
-perfect-scrollbar.vhs{
-  height: calc(100vh - 140px);
-  margin-top: -21px;
-}
-
-mat-sidenav-container .sidenav{
-  background:#2f353a;
-}
-cdk-sidemenu .mat-nav-list .mat-list-item:hover{
-  background:#20a8d8 !important;
 }
 
 :host {
   height: 100%;
-  background-color: white;
 }
 
 .toolbar-user-container {
@@ -102,3 +86,83 @@ cdk-sidemenu .mat-nav-list .mat-list-item:hover{
     }
   }
 }
+
+mat-toolbar{
+  /*background-color: #2196f3;*/
+  background-color: #3f51b5;
+}
+
+.mat-elevation-z4{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 100;
+}
+
+div.logo{
+  padding-left: 47px;
+  padding-right: 47px;
+}
+
+div.MDB-body{
+  //格子背景-css
+  background: linear-gradient(135deg,#f0f0f0 22px,rgba(0,0,0,.04) 22px,rgba(0,0,0,.04) 24px,transparent 24px,transparent 67px,rgba(0,0,0,.04) 67px,rgba(0,0,0,.04) 69px,transparent 69px),linear-gradient(225deg,#f0f0f0 22px,rgba(0,0,0,.04) 22px,rgba(0,0,0,.04) 24px,transparent 24px,transparent 67px,rgba(0,0,0,.04) 67px,rgba(0,0,0,.04) 69px,transparent 69px) 0 64px;
+  background-color: #f0f0f0;
+  background-size: 64px 128px;
+
+  padding-bottom: 60px;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+a{
+  text-decoration:none;
+  color: #202020;
+}
+
+.mat-menu-item a mat-icon{
+  margin-right: 2px;
+  margin-top: -3px;
+}
+
+/*dropDown 伪元素*/
+.out,.in{
+  position:absolute;
+  width:0;
+  height:0px;
+}
+
+.out{
+  border:20px solid transparent;
+  border-bottom-color:#fff;
+  top:-40px;
+  left:20%;
+}
+
+
+/*************头部input框 -- 点击伸缩功能************/
+span.spacer{
+  text-align: center;
+}
+.search-wrap{
+  margin: 0 auto;
+  width: 200px;
+  //height: 64px;
+}
+.search{
+  width: 100px;
+  height: 35px;
+  border: 1px solid #3f51b5 !important;
+  padding: 0 10px;
+  /* float: right; */ /*居中的话就两边伸展，居右就往左边伸展，居左就往右边伸展*/
+  border-radius: 20px;
+  color: #2c2c2c;
+  transition: all 1s; /*transition: cubic-bezier(0.68, -0.55, 0.27, 1.55) all 1s;-贝塞尔曲线*/
+  /* opacity: 0.5; */  /*透明度*/
+}
+.search:focus{
+  width: 100%;
+  outline:none;
+}
+/*************  end    ************/

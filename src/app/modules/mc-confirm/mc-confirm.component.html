@@ -1,33 +1,12 @@
-<!-- <div bsModal #confirmModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true"> -->
-  <!-- <div class="modal-dialog" [ngClass]="option.modalClass"> -->
-    <!-- <div class="modal-content"> -->
-      <!-- <div class="modal-header"> -->
-        <!-- <h4 class="modal-title pull-left">{{option.title}}</h4> -->
-        <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()"> -->
-          <!-- <span aria-hidden="true">&times;</span> -->
-        <!-- </button> -->
-      <!-- </div> -->
-      <!-- <div class="modal-body"> -->
-        <!-- {{confirmValue?.message}} -->
-      <!-- </div> -->
-      <!-- <div class="modal-footer"> -->
-        <!-- <button type="button" class="btn btn-danger" (click)="reject()" *ngIf="option.promptOnly!==true">{{option.cancelText}}</button> -->
-        <!-- <button type="button" class="btn btn-primary" (click)="accept()">{{option.okText}}</button> -->
-      <!-- </div> -->
-    <!-- </div> -->
-  <!-- </div> -->
-<!-- </div> -->
-
 <div class="yesNo" fxLayout="row" fxLayoutAlign="start center">
   <mat-icon class="icon_error">error</mat-icon>
   <h1 mat-dialog-title>{{option.title}}</h1>
 </div>
-
+<!--<h1 mat-dialog-title>{{option.title}}</h1>-->
 <div mat-dialog-content class="pt-1 pb-1">
   {{confirmValue?.message}}
 </div>
-
-<div class="button-row" mat-dialog-actions fxLayout="row" fxLayoutAlign="center center">
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center">
   <button mat-raised-button color="primary" (click)="reject()" *ngIf="option.promptOnly!==true">{{option.cancelText}}</button>
   <button mat-raised-button color="primary" (click)="accept()">{{option.okText}}</button>
 </div>

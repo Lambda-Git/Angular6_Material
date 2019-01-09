@@ -21,6 +21,7 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FullscreenComponent } from './fullscreen/fullscreen.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { UserMenuComponent } from './user-menu/user-menu.component';
+import {MatMenuModule} from '@angular/material/menu';
 import {
     MatSidenavModule,
     MatSliderModule,
@@ -63,6 +64,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatTabsModule,
         MatSliderModule,
         MatProgressBarModule,
+        MatMenuModule
     ],
 
 

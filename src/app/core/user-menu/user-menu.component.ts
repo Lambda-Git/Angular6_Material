@@ -1,8 +1,4 @@
 import { Component, OnInit, Input, HostListener, ElementRef } from '@angular/core';
-import {MatDialog} from '@angular/material';
-
-import { LoginService } from '../../services/login.service';
-import { ChangePasswordComponent } from '../../auth/change-password/change-password.component';
 
 @Component({
   selector: 'cdk-user-menu',
@@ -14,11 +10,7 @@ export class UserMenuComponent implements OnInit {
 
   	//currentUser = null;
   	Hari;
-    user = {
-      username: 'Admin123$',
-      password: '****'
-    };
-
+  	
 
   	@Input() currentUser = null;
   	@HostListener('document:click', ['$event', '$event.target'])
@@ -32,18 +24,12 @@ export class UserMenuComponent implements OnInit {
       		this.isOpen = false;
     	}
   	}
-
-
-  	constructor(
-  	  private elementRef: ElementRef,
-      private _login: LoginService,
-      public dialog: MatDialog
-    ) { }
+  	
+    
+  	constructor(private elementRef: ElementRef) { }
 
 
   	ngOnInit() {
-
   	}
-
 
 }

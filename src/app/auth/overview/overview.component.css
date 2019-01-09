@@ -1,0 +1,134 @@
+div.search_type{
+  width: 80%;
+}
+div.search_type .button{
+  text-align: center;
+}
+div.search_type .button button{
+  border-radius: 5px;
+}
+div.search_type mat-button-toggle-group{
+  margin-bottom: 18px;
+}
+
+
+mat-button-toggle.active{
+  background-color: #e0e0e0;
+  color: #000000;
+}
+
+div.type{
+  /*background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#61618d), to(#f6f6f8));*/
+  border-top: 20px solid #227aac;
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.26);
+  width: 95%;
+  height: 74%;
+}
+
+div.type .type_info{
+  width: 100%;
+  text-align: left;
+}
+
+div.type img{
+  width: 64px;
+}
+
+div.type_info span{
+  font-size: 21px;
+  font-weight: 600;
+}
+
+div.more_search span.more{
+  font-size: 15px;
+}
+
+div.three_list{
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.26);
+  width: 96%;
+  height: 100%;
+}
+
+div.two_list{
+  background: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.26);
+  width: 97%;
+  height: 100%;
+  margin-top: 30px;
+}
+
+mat-card.list{
+  width: 100%;
+  height:100%;
+}
+
+
+/*滚动表单css*/
+.example-container {
+  position: relative;
+}
+
+.example-table-container {
+  position: relative;
+  max-height: 300px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+
+/*mat-list-最新交易信息*/
+mat-list.deal_obj tr td:nth-child(1){
+  width: 115px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+mat-list.deal_obj tr td:nth-child(2){
+  font-size: 14px;
+  word-break: break-all;
+}
+
+mat-list.deal_obj mat-list-item:hover{
+  background: #f5e9d6;
+}
+
+div.list_title{
+  padding-left: 20px;
+  margin-top: 20px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+}
+/*Echart-图标-css*/
+.demo-chart {
+  height: 300px;
+}
+
+/************环绕效果************/
+.ribbon-lanren-green {
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon-green {
+  height: 15px;
+  -webkit-transform: rotate(135deg);
+  -moz-transform: rotate(135deg);
+  -ms-transform: rotate(135deg);
+  -o-transform: rotate(135deg);
+  position: relative;
+  left: -43px;
+  top: 22px;
+  width: 99px;
+  background-color: #227aac;
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+}
+/************end************/

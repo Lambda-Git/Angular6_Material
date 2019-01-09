@@ -1,70 +1,49 @@
-<div class="rowPage">
-  <div class="leftRow pl-2 pr-2" fxLayout="column">
-    <h3>登录</h3>
-    <mat-form-field>
-      <input
-        matInput
-        placeholder="用户名"
-        name="username"
-        id="username"
-        [(ngModel)]="edit.username"
-      />
-    </mat-form-field>
-    <mat-form-field>
-      <input
-        matInput
-        type="password"
-        placeholder="密码"
-        name="password"
-        id="password"
-        [(ngModel)]="edit.password"
-      />
-    </mat-form-field>
-    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <mat-form-field class="validCode">
-        <input
-          matInput
-          placeholder="验证码"
-          name="code"
-          [(ngModel)]="edit.code"
-        />
+<div class="zoomIn" fxLayout="column" fxLayoutAlign="center center"  style="height: 700px;">
+
+	<div class="login_table" fxLayout="column" fxLayoutAlign="center center" [formGroup]="loginForm" >
+
+    <div class="mdb_logo">
+      <img src="../../assets/images/banner.png">
+    </div>
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>用户名</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="username">
+        <mat-icon matSuffix>account_circle</mat-icon>
       </mat-form-field>
-      <div class="imgCode">
-        <img [src]="codeUrl" (click)="getValidateCode()" />
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>密码</mat-label>
+        <input matInput placeholder="Placeholder" type={{type}} formControlName="password">
+        <mat-icon *ngIf="type == 'password'" matSuffix svgIcon="watch" (click)=" type = '' "></mat-icon>
+        <mat-icon *ngIf="type != 'password'" matSuffix svgIcon="noWatch" (click)=" type = 'password' "></mat-icon>
+      </mat-form-field>
+    </div>
+
+
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <div>
+        <mat-form-field appearance="outline" style="width: 128px">
+          <mat-label>验证码</mat-label>
+          <input matInput placeholder="Placeholder" formControlName="valCode">
+          <mat-icon matSuffix svgIcon="password"></mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="val_code">
+        1234
+        <!--<img src="">-->
       </div>
     </div>
-    <div
-      class="mt-2"
-      fxLayout="row"
-      fxLayoutAlign="center center"
-      fxLayoutGap="20px"
-      fxFlexOffset="10px"
-    >
-      <button
-        class="reset"
-        mat-stroked-button
-        color="primary"
-        (click)="ngOnInit()"
-      >
-        重置
-      </button>
-      <button
-        class="save"
-        mat-stroked-button
-        color="primary"
-        (click)="doLogin()"
-      >
-        登录
-      </button>
+
+    <div>
+      <button class="login_buton" mat-raised-button color="primary" [disabled]="loginForm.invalid" (click)="login()">登录</button>
     </div>
-  </div>
-  <div class="rightRow" fxLayout="column">
-    <h2 class="text-center" fxFlexOffset="50px">
-      <img src="../../assets/images/banner.png" />
-    </h2>
-    <h3 fxFlexOffset="50px">构建与管理您的区块链网络</h3>
-    <div class="copyright" fxFlexOffset="80px">
-      Copyright&copy; 2018-2024 北京宏链科技有限公司
-    </div>
-  </div>
+
+
+	</div>
+
+
 </div>
